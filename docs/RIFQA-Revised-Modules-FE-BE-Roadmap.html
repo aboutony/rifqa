@@ -282,6 +282,7 @@
           <tr><td>Symptoms and weight</td><td><code>POST /api/symptoms</code> and <code>POST /api/weight-logs</code> persist when authenticated.</td><td>Visit summary generation and trend views.</td></tr>
           <tr><td>Consent and privacy</td><td><code>POST /api/consents</code> and <code>POST /api/privacy</code> record consent plus export/delete requests.</td><td>Automated export package and deletion workflow.</td></tr>
           <tr><td>Relaxation and exercise</td><td><code>POST /api/recommendations</code>, <code>POST /api/playlists</code>, and <code>POST /api/exercise-plans</code>.</td><td>Push notification delivery and richer behavior analysis.</td></tr>
+          <tr><td>AI companion and visit summaries</td><td>Server-side OpenAI Responses API gateway with urgent-rule fallback and <code>/api/visit-summary</code>.</td><td>Prompt evals, moderation layer, production monitoring.</td></tr>
           <tr><td>Localization</td><td>Arabic and English user-facing API responses.</td><td>Translation CMS and reviewer workflow.</td></tr>
           <tr><td>Safety</td><td>Rule-based urgent/watch/normal classification.</td><td>Clinician-approved rule registry and audit trail.</td></tr>
         </tbody>
@@ -298,6 +299,8 @@
           <tr><td>Supabase initial schema</td><td>Done</td><td>Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests.</td></tr>
           <tr><td>Wellness recommendation schema</td><td>Done</td><td>Migration covers relaxation playlists, exercise plans, and wellness recommendations.</td></tr>
           <tr><td>AI wellness recommendation API</td><td>Done</td><td>Check-ins and <code>/api/recommendations</code> can return relaxation/exercise prompts based on behavior signals.</td></tr>
+          <tr><td>OpenAI gateway</td><td>Done</td><td><code>/api/companion</code> uses server-side OpenAI when safe and falls back to deterministic rules for urgent cases.</td></tr>
+          <tr><td>Saudi legal drafts</td><td>Done</td><td>Draft privacy policy and terms/disclaimer created under <code>docs/legal</code>; needs legal review.</td></tr>
           <tr><td>RLS policies</td><td>Done</td><td>Every user-owned table has owner-only RLS policies.</td></tr>
           <tr><td>Demo/production split</td><td>Done</td><td>Demo works without auth; production requires Supabase env and Bearer token.</td></tr>
           <tr><td>Build/lint verification</td><td>Done</td><td><code>npm run lint</code> and <code>npm run build</code> pass.</td></tr>

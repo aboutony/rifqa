@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { assessText } from './_lib/safety.js'
 import { getLang, readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'
+import { createMaternalCompanionResponse } from './_lib/openai.js'
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return sendMethodNotAllowed(res, ['POST'])
 
   const lang = getLang(req)
@@ -10,10 +11,19 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const message = readString(body.message)
   const assessment = assessText(message, lang)
 
-  const reply =
+  const fallbackReply =
     lang === 'ar'
-      ? `${assessment.message} تذكير مهم: رفيقة لا تستبدل الطبيبة، لكنها تساعدك على ترتيب الخطوة التالية.`
+      ? `${assessment.message} تذكير مهم: رفقة لا تستبدل الطبيبة، لكنها تساعدك على ترتيب الخطوة التالية.`
       : `${assessment.message} Important reminder: RIFQA does not replace your clinician, but it can help organize the next step.`
+  const aiResponse =
+    assessment.level === 'urgent'
+      ? null
+      : await createMaternalCompanionResponse({
+          message,
+          lang,
+          safetyMessage: assessment.message,
+        })
+  const reply = aiResponse?.text || fallbackReply
 
   return sendJson(res, 200, {
     data: {
@@ -21,7 +31,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       role: 'assistant',
       reply,
       assessment,
-      model: 'safe-rules-stub',
+      model: aiResponse?.model ?? 'safe-rules-fallback',
+      requestId: aiResponse?.requestId ?? null,
       persisted: false,
     },
   })

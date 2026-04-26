@@ -37,6 +37,7 @@ The current backend runs as Vercel serverless functions under `api/`.
 | `/api/profile` | `GET` / `PUT` | Demo journey profile contract |
 | `/api/checkins?lang=ar|en` | `POST` | Daily check-in safety assessment |
 | `/api/companion?lang=ar|en` | `POST` | Safety-first AI companion stub |
+| `/api/visit-summary?lang=ar|en` | `POST` | AI-assisted doctor visit summary |
 | `/api/kick-sessions?lang=ar|en` | `POST` | Kick count session guidance |
 | `/api/contractions?lang=ar|en` | `POST` | Contraction pattern guidance |
 | `/api/symptoms` | `POST` | Symptom log persistence |
@@ -50,6 +51,13 @@ The current backend runs as Vercel serverless functions under `api/`.
 In `RIFQA_ENV=demo`, API routes return seeded/demo responses without requiring auth. In `RIFQA_ENV=production`, routes require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and a valid `Authorization: Bearer <access_token>` header.
 
 The initial Supabase migration is in `supabase/migrations/202604260001_initial_health_data.sql`.
+
+## Legal Drafts
+
+- `docs/legal/PRIVACY_POLICY_DRAFT.md`
+- `docs/legal/TERMS_AND_MEDICAL_DISCLAIMER_DRAFT.md`
+
+These drafts are Saudi-focused and reference PDPL/SDAIA posture, but they still require Saudi-qualified legal review before launch.
 
 ## Product Direction
 

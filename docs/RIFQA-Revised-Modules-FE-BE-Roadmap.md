@@ -311,6 +311,7 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | Symptom and weight logs | `POST /api/symptoms`, `POST /api/weight-logs` with Supabase persistence when authenticated | Visit summary generation and trend views |
 | Consent and privacy | `POST /api/consents`, `POST /api/privacy` for export/delete request records | Automated export package and deletion workflow |
 | Relaxation and exercise | `POST /api/recommendations`, `POST /api/playlists`, `POST /api/exercise-plans` with doctor-overrides-AI source logic | Push notification delivery and richer behavior analysis |
+| AI companion and visit summaries | Server-side OpenAI Responses API gateway with `store: false`, urgent-rule fallback, and `/api/visit-summary` | Prompt evals, moderation layer, production monitoring |
 | Localization | Arabic and English API responses | Translation CMS and reviewer workflow |
 | Safety | Rule-based urgent/watch/normal classification | Clinician-approved rule registry and audit trail |
 
@@ -325,6 +326,8 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | Supabase initial schema | Done | Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests |
 | Wellness recommendation schema | Done | Migration covers relaxation playlists, exercise plans, and wellness recommendations |
 | AI wellness recommendation API | Done | Check-ins and `/api/recommendations` can return relaxation/exercise prompts based on behavior signals |
+| OpenAI gateway | Done | `/api/companion` uses server-side OpenAI when safe and falls back to deterministic rules for urgent cases |
+| Saudi legal drafts | Done | Draft privacy policy and terms/disclaimer created under `docs/legal`; needs legal review |
 | RLS policies | Done | Every user-owned table has owner-only RLS policies |
 | Demo/production split | Done | Demo works without auth; production requires Supabase env and Bearer token |
 | Build/lint verification | Done | `npm run lint` and `npm run build` pass |
