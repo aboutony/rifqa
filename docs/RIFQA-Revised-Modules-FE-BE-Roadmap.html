@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIFQA Revised Modules, FE/BE Roadmap</title>
+  <style>
+    :root {
+      --bg: #120d1a;
+      --surface: #1f1730;
+      --surface-2: #2a1f3d;
+      --text: #f7f1ff;
+      --muted: #c8b8e8;
+      --soft: #9b88b8;
+      --violet: #a78bfa;
+      --rose: #f0a0b4;
+      --teal: #6ee7e0;
+      --gold: #d4ba9a;
+      --red: #fb7185;
+      --border: rgba(255,255,255,.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      padding: 44px 40px 30px;
+      background: linear-gradient(135deg, #3b1f5f, #120d1a 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 { margin: 0 0 8px; font-size: 34px; }
+    header p { margin: 0; color: var(--muted); max-width: 980px; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 40px;
+      background: rgba(18,13,26,.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+    nav a:hover { color: var(--text); border-color: var(--violet); }
+    main { max-width: 1180px; margin: 0 auto; padding: 34px 28px 70px; }
+    section {
+      margin: 0 0 34px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+    h2 { margin: 0 0 14px; color: var(--violet); font-size: 22px; }
+    h3 { margin: 24px 0 10px; color: var(--rose); font-size: 17px; }
+    p { color: var(--muted); }
+    .verdict {
+      border-left: 4px solid var(--red);
+      background: rgba(251,113,133,.08);
+      padding: 16px 18px;
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .card strong { color: var(--teal); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 22px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    th, td {
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 13px;
+    }
+    th {
+      background: rgba(167,139,250,.16);
+      color: var(--text);
+      text-align: left;
+    }
+    td { color: var(--muted); }
+    ul, ol { color: var(--muted); }
+    li { margin: 6px 0; }
+    .must { color: var(--red); font-weight: 700; }
+    .moat { color: var(--teal); font-weight: 700; }
+    .phase { color: var(--gold); }
+    code {
+      color: var(--teal);
+      background: rgba(110,231,224,.08);
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+    @media (max-width: 820px) {
+      header { padding: 28px 20px; }
+      nav { padding: 10px 20px; }
+      main { padding: 20px 14px 50px; }
+      section { padding: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RIFQA Revised Modules, Features, FE/BE Roadmap</h1>
+    <p>Blunt product roadmap for building the number one Saudi and GCC maternal wellness app. Generated 2026-04-26 after reviewing the RIFQA folder, competitor notes, battlecard, design docs, and MVP blueprint.</p>
+  </header>
+
+  <nav>
+    <a href="#verdict">Verdict</a>
+    <a href="#competition">Competition</a>
+    <a href="#pillars">Pillars</a>
+    <a href="#modules">Modules</a>
+    <a href="#mvp">MVP</a>
+    <a href="#fe">FE Phases</a>
+    <a href="#be">BE Phases</a>
+    <a href="#release">Release Plan</a>
+    <a href="#rules">Rules</a>
+  </nav>
+
+  <main>
+    <section id="verdict">
+      <h2>1. Blunt Strategic Verdict</h2>
+      <div class="verdict">
+        RIFQA has a strong strategic spine: Arabic-first, Saudi-first, privacy-first, emotionally intelligent maternal support. But the product cannot become number one while missing basic pregnancy utilities. Contraction counter, kick counter, pregnancy weight tracking, baby size comparisons, visuals, symptom logs, milestones, and memory capture are the entry ticket.
+      </div>
+      <p>The winning product is not tracker vs companion. It must be both: the best tracker, the safest companion, and the most culturally fluent maternal platform in the region.</p>
+    </section>
+
+    <section id="competition">
+      <h2>2. Competitive Reality</h2>
+      <table>
+        <thead><tr><th>Competitor</th><th>What They Do Well</th><th>Where RIFQA Can Beat Them</th><th>What RIFQA Must Copy or Improve</th></tr></thead>
+        <tbody>
+          <tr><td>What to Expect</td><td>Brand trust, 15M+ users, medical content, 3D videos, size comparisons, utility tools, community, registry.</td><td>Arabic-native emotional companion, Saudi care pathways, PPD screening, privacy, crisis-safe mode.</td><td>Weekly visuals, baby-size moments, full pregnancy utility suite, visible medical-review authority.</td></tr>
+          <tr><td>Bump</td><td>Planning, registry, birth plan, baby names, baby shower, milestones, shareability.</td><td>No Arabic, no Saudi relevance, no AI, no mental health.</td><td>Birth plan, name finder, registry/gift tools, milestone tracker, shareable memory cards.</td></tr>
+          <tr><td>Amila</td><td>Simple, free, low-friction week/due-date/contraction/kick/weight tools.</td><td>RIFQA is deeper if it remains simple at the surface.</td><td>Make core tracking faster than Amila.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="pillars">
+      <h2>3. Revised Product Pillars</h2>
+      <div class="grid">
+        <div class="card"><strong>Track everything that matters.</strong><br />Pregnancy, labor, baby routines, recovery, milestones, medications, appointments, memories.</div>
+        <div class="card"><strong>Guide the mother.</strong><br />Mood, fatigue, support, PPD risk, crisis pathways, concrete next actions.</div>
+        <div class="card"><strong>Own Saudi/GCC context.</strong><br />Arabic-first, Hijri, Ramadan, Islamic guidance, Saudi care paths, family dynamics.</div>
+        <div class="card"><strong>Make AI safe.</strong><br />LLM for companion support, rules for safety-critical decisions.</div>
+        <div class="card"><strong>Build trust as infrastructure.</strong><br />Consent, data minimization, no employer visibility, clinical review.</div>
+        <div class="card"><strong>Create ethical lock-in.</strong><br />Journal, milestones, partner mode, services, B2B access.</div>
+      </div>
+    </section>
+
+    <section id="modules">
+      <h2>4. Revised Modules and Capabilities</h2>
+
+      <h3>4.1 Journey Intelligence Core</h3>
+      <table>
+        <thead><tr><th>Module</th><th>Capabilities</th><th>FE</th><th>BE</th></tr></thead>
+        <tbody>
+          <tr><td>Unified Mother Profile</td><td>Pregnancy week, due date, unknown-week path, postpartum stage, child age up to 3, delivery type, feeding mode, baseline sleep/stress/support.</td><td>Gentle onboarding, editable profile, privacy promise.</td><td><code>profiles</code>, journey states, confidence levels.</td></tr>
+          <tr><td>Journey Engine</td><td>Stage, check-in cadence, content eligibility, tone, nudge intensity.</td><td>Relevant dashboard cards.</td><td>Rules engine, state machine, feature flags, event triggers.</td></tr>
+          <tr><td>Timeline</td><td>Pregnancy, postpartum, toddler timeline.</td><td>Week and child-age views.</td><td>Stage-based content schema.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>4.2 Table-Stakes Pregnancy Toolkit</h3>
+      <table>
+        <thead><tr><th>Module</th><th>Capabilities</th><th>FE</th><th>BE</th></tr></thead>
+        <tbody>
+          <tr><td>Due Date and Week Calculator</td><td>Due date, LMP estimate, manual week, unknown week.</td><td>Date picker, week selector, not-sure fallback.</td><td>Calculator service, confidence model.</td></tr>
+          <tr><td>Contraction Counter</td><td>Start/stop, duration, frequency, guidance thresholds.</td><td>One-tap labor-safe timer.</td><td><code>contractions</code>, summaries, threshold rules.</td></tr>
+          <tr><td>Kick Counter</td><td>Kick sessions, reminders, reduced-movement guidance.</td><td>Large tap target, calm escalation copy.</td><td><code>kick_sessions</code>, <code>kick_events</code>.</td></tr>
+          <tr><td>Weight Tracker</td><td>Weight logs, gain range, visit notes.</td><td>Chart and non-shaming log modal.</td><td><code>weight_logs</code>, references.</td></tr>
+          <tr><td>Symptoms and Medications</td><td>Symptoms, severity, notes, medications, appointment prep.</td><td>Fast chips and doctor summary.</td><td><code>symptom_logs</code>, <code>medication_logs</code>.</td></tr>
+          <tr><td>Baby Visuals and Size</td><td>Weekly visuals and Saudi size comparisons.</td><td>Shareable weekly card.</td><td>Licensed asset CMS and share-card generation.</td></tr>
+          <tr><td>Twin Mode</td><td>Copy and visual variants for twin pregnancy.</td><td>Optional setting.</td><td>Profile flag and content variants.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>4.3 Mental Health, AI, Baby, and Saudi Moat</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Must Build</th><th>Why It Matters</th></tr></thead>
+        <tbody>
+          <tr><td>Mental Health</td><td>Daily check-ins, PPD/anxiety screening, mood trends, crisis-safe mode, support library.</td><td>This is RIFQA's sharpest differentiation and subscription engine.</td></tr>
+          <tr><td>AI Guidance</td><td>Arabic AI companion, smart action cards, doctor visit prep, Saudi care pathway helper.</td><td>Turns static content into state-aware help.</td></tr>
+          <tr><td>Baby 0-3</td><td>Feeding, sleep, diapers, postpartum recovery, milestones, journal, vaccines.</td><td>Prevents churn after birth.</td></tr>
+          <tr><td>Saudi/GCC</td><td>Ramadan mode, Islamic guidance, Hijri dates, Arabic baby names, partner mode, domestic support context, Hajj/Umrah safety.</td><td>This is the cultural moat Western apps cannot copy quickly.</td></tr>
+          <tr><td>Growth</td><td>Birth plan, registry/gift list, telehealth partners, moderated community, B2B sponsored access.</td><td>Turns trust into distribution and revenue.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="mvp">
+      <h2>5. Recommended MVP Cut</h2>
+      <p class="must">MVP must include the table-stakes toolkit before public launch.</p>
+      <ol>
+        <li>Onboarding, privacy promise, anonymous or low-PII start.</li>
+        <li>Journey profile, pregnancy week/due date, unknown-week flow.</li>
+        <li>Home dashboard, daily emotional check-in, PPD/anxiety screening, crisis-safe mode.</li>
+        <li>AI companion, what-to-do-now cards, Saudi care pathway.</li>
+        <li>Contraction counter, kick counter, weight tracker, symptoms, medications.</li>
+        <li>Baby size comparisons, weekly visuals, feeding/sleep/diaper logs.</li>
+        <li>Privacy center, notifications, subscriptions with crisis protections, CMS, admin console.</li>
+      </ol>
+      <p>Do not include open community, full marketplace, insurer integrations, complex gamification, or unsupported medical claims in MVP.</p>
+    </section>
+
+    <section id="fe">
+      <h2>6. Detailed FE Phases</h2>
+      <table>
+        <thead><tr><th>Phase</th><th>Subphases</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td class="phase">0. Product System</td><td>Light mode + dark mode tokens, navigation, Arabic UX kit, accessibility.</td><td>RTL native, light/dark modes, 48px touch targets, 200% text support.</td></tr>
+          <tr><td class="phase">1. Onboarding and Trust</td><td>Splash, language, privacy promise, low-PII auth, journey setup, emotional baseline.</td><td>User reaches home without name/email/phone.</td></tr>
+          <tr><td class="phase">2. Pregnancy Toolkit</td><td>Home, timeline, contractions, kicks, weight, symptoms, meds, baby size/visuals.</td><td>First screen proves RIFQA is a complete pregnancy app.</td></tr>
+          <tr><td class="phase">3. Mental Health</td><td>Daily check-in, screening, mood trends, crisis-safe mode, action cards.</td><td>Every concerning signal ends with a concrete next step.</td></tr>
+          <tr><td class="phase">4. AI Companion</td><td>Chat UI, context handoff, voice input, private summary.</td><td>User understands AI is support, not a doctor.</td></tr>
+          <tr><td class="phase">5. Baby 0-3</td><td>Baby dashboard, logs, milestones, journal, vaccines.</td><td>Post-birth transition feels natural and useful.</td></tr>
+          <tr><td class="phase">6. Saudi/GCC</td><td>Ramadan, Islamic guidance, baby names, partner mode, birth plan.</td><td>Feels made for Saudi mothers, not translated.</td></tr>
+          <tr><td class="phase">7. Growth</td><td>Subscriptions, B2B activation, telehealth, moderated community.</td><td>No paywall in crisis; no community without moderation.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="be">
+      <h2>7. Detailed BE Phases</h2>
+      <table>
+        <thead><tr><th>Phase</th><th>Subphases</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td class="phase">0. Architecture and Compliance</td><td>Supabase, RLS, UUID-first data, core schema, audit, delete/export.</td><td>RLS enabled on every user table; no mandatory PII.</td></tr>
+          <tr><td class="phase">1. Journey and CMS</td><td>Stage calculator, rules engine, CMS, clinical review workflow.</td><td>User-facing health content must be approved.</td></tr>
+          <tr><td class="phase">2. Tracking and Logs</td><td>Pregnancy utilities, baby routines, milestones, journal, vaccines.</td><td>Offline sync and deletion rules documented.</td></tr>
+          <tr><td class="phase">3. Mental Health Safety</td><td>Check-ins, screening, escalation, resources, safety monitoring.</td><td>Scores never exposed as diagnosis; escalation deterministic.</td></tr>
+          <tr><td class="phase">4. AI Platform</td><td>LLM gateway, prompts, guardrails, redaction, summaries.</td><td>Safety rules override model output.</td></tr>
+          <tr><td class="phase">5. Notifications</td><td>Quiet hours, nudges, feature flags, personalization.</td><td>Cool-downs prevent spam; no black-box safety escalation.</td></tr>
+          <tr><td class="phase">6. Monetization and Integrations</td><td>Entitlements, B2B orgs, telehealth, registry/commerce.</td><td>No individual employer visibility, ever.</td></tr>
+          <tr><td class="phase">7. Admin and Analytics</td><td>Admin console, privacy-safe analytics, quality dashboards, research exports.</td><td>No raw chat content stored for analytics.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="release">
+      <h2>8. Suggested Release Plan</h2>
+      <table>
+        <thead><tr><th>Release</th><th>Goal</th><th>Ships</th></tr></thead>
+        <tbody>
+          <tr><td>Alpha</td><td>Prove trust and Arabic-native feel.</td><td>Onboarding, privacy, profile, home, check-in, basic AI, CMS, admin shell, RLS.</td></tr>
+          <tr><td>Private Beta</td><td>Remove competitor gaps.</td><td>Contractions, kicks, weight, symptoms, meds, timeline, size comparisons, visuals.</td></tr>
+          <tr><td>Public Launch</td><td>Complete companion plus tracker.</td><td>PPD screening, crisis mode, action cards, care pathway, baby logs, subscriptions.</td></tr>
+          <tr><td>Launch +90</td><td>Retention moat.</td><td>Milestones, journal, vaccines, recovery, share cards, AI summaries.</td></tr>
+          <tr><td>Launch +180</td><td>Saudi category ownership.</td><td>Ramadan, Islamic guidance, baby names, partner mode, birth plan, B2B pilot.</td></tr>
+          <tr><td>Year 2</td><td>Platform.</td><td>Telehealth, moderated community, registry, academic validation, advanced personalization.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="rules">
+      <h2>9. Non-Negotiable Product Rules</h2>
+      <ol>
+        <li>Do not launch publicly without contraction counter, kick counter, and weight tracking.</li>
+        <li>Do not paywall crisis, distress, or urgent guidance.</li>
+        <li>Do not show diagnostic labels to users.</li>
+        <li>Do not store raw chat content for analytics.</li>
+        <li>Do not give employers individual-level visibility.</li>
+        <li>Do not treat Arabic as translation. Arabic is the default product.</li>
+        <li>Do not create an open community without moderation infrastructure.</li>
+        <li>Do not make the UI feel like a hospital form.</li>
+        <li>Do not let AI make safety-critical decisions alone.</li>
+        <li>Do not overbuild marketplace/community before the core companion works.</li>
+      </ol>
+      <p class="moat">Number-one app bet: RIFQA must become the first app that understands the Saudi mother as a whole person: body, baby, emotions, faith, family, healthcare system, and privacy.</p>
+    </section>
+  </main>
+</body>
+</html>
