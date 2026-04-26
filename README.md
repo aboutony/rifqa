@@ -14,6 +14,8 @@ Arabic-first full-stack foundation for RIFQA, a Saudi and GCC maternal wellness 
 - Mental-health support and care-pathway screen
 - Vercel API backend foundation with bilingual contracts
 - Safety-first backend stubs for check-ins, AI companion, kick sessions, and contractions
+- Seeded demo mode where every visible button has a working destination or action
+- Supabase production schema with RLS for profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weight logs, and privacy requests
 
 ## Scripts
 
@@ -37,8 +39,14 @@ The current backend runs as Vercel serverless functions under `api/`.
 | `/api/companion?lang=ar|en` | `POST` | Safety-first AI companion stub |
 | `/api/kick-sessions?lang=ar|en` | `POST` | Kick count session guidance |
 | `/api/contractions?lang=ar|en` | `POST` | Contraction pattern guidance |
+| `/api/symptoms` | `POST` | Symptom log persistence |
+| `/api/weight-logs` | `POST` | Pregnancy weight log persistence |
+| `/api/consents` | `POST` | Consent event persistence |
+| `/api/privacy` | `POST` | Export/delete privacy request persistence |
 
-This slice does not persist health data yet. The next backend milestone is Supabase auth, migrations, RLS, consent, export, and delete flows.
+In `RIFQA_ENV=demo`, API routes return seeded/demo responses without requiring auth. In `RIFQA_ENV=production`, routes require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and a valid `Authorization: Bearer <access_token>` header.
+
+The initial Supabase migration is in `supabase/migrations/202604260001_initial_health_data.sql`.
 
 ## Product Direction
 

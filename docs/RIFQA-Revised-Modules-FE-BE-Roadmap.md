@@ -303,6 +303,8 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | AI companion | `POST /api/companion?lang=ar|en` safety-first rules stub | OpenAI gateway, prompt versions, redaction, model telemetry |
 | Kick counter | `POST /api/kick-sessions?lang=ar|en` with reduced-movement guidance | Session persistence, reminders, history charts |
 | Contraction counter | `POST /api/contractions?lang=ar|en` with pattern guidance | Labor session persistence, clinician export |
+| Symptom and weight logs | `POST /api/symptoms`, `POST /api/weight-logs` with Supabase persistence when authenticated | Visit summary generation and trend views |
+| Consent and privacy | `POST /api/consents`, `POST /api/privacy` for export/delete request records | Automated export package and deletion workflow |
 | Localization | Arabic and English API responses | Translation CMS and reviewer workflow |
 | Safety | Rule-based urgent/watch/normal classification | Clinician-approved rule registry and audit trail |
 
@@ -314,16 +316,19 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | Bilingual response contracts | Done | `lang=ar|en` supported in user-facing endpoints |
 | Safety-first companion stub | Done | No direct model call yet, which is correct until guardrails and redaction are ready |
 | Tracker API contracts | Done | Kick and contraction endpoints define MVP data shapes |
+| Supabase initial schema | Done | Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests |
+| RLS policies | Done | Every user-owned table has owner-only RLS policies |
+| Demo/production split | Done | Demo works without auth; production requires Supabase env and Bearer token |
 | Build/lint verification | Done | `npm run lint` and `npm run build` pass |
 
 ### BE Phase 0B: Next Required Backend Work
 
 | Priority | Build | Why It Matters |
 |---|---|---|
-| P0 | Supabase schema migrations for profiles, pregnancies, check-ins, kicks, contractions, symptoms, weight logs | Without persistence, RIFQA cannot become a real tracker |
-| P0 | Auth with anonymous/low-PII mode | Matches the privacy promise and removes signup friction |
-| P0 | RLS policies on every user-owned table | Non-negotiable for maternal health data |
-| P0 | Consent, export, delete records | Needed for trust and PDPL posture |
+| P0 | Supabase project creation and migration execution | The schema exists in code but must be applied to the real Supabase project |
+| P0 | Auth UI with anonymous/low-PII mode | Matches the privacy promise and removes signup friction |
+| P0 | Frontend API integration for persisted trackers | Demo UI is clickable; production UI still needs authenticated API wiring |
+| P0 | Export package and deletion worker | Request records exist; actual export/delete processing is next |
 | P1 | OpenAI gateway with Arabic safety prompt, redaction, rate limits, and safety override | AI should not ship as raw chat completion |
 | P1 | Content CMS tables for timeline, care pathways, and resources | Medical content must be reviewed and updateable without releases |
 | P1 | Visit summary generator | Converts logs into practical clinical value |

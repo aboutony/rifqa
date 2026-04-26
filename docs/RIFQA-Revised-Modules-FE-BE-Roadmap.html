@@ -278,6 +278,8 @@
           <tr><td>Daily check-ins</td><td><code>POST /api/checkins?lang=ar|en</code> with safety assessment.</td><td>Stored check-ins, trends, screening templates.</td></tr>
           <tr><td>AI companion</td><td><code>POST /api/companion?lang=ar|en</code> safety-first rules stub.</td><td>OpenAI gateway, prompt versions, redaction, telemetry.</td></tr>
           <tr><td>Trackers</td><td><code>POST /api/kick-sessions</code> and <code>POST /api/contractions</code>.</td><td>Persistence, reminders, history charts, clinician export.</td></tr>
+          <tr><td>Symptoms and weight</td><td><code>POST /api/symptoms</code> and <code>POST /api/weight-logs</code> persist when authenticated.</td><td>Visit summary generation and trend views.</td></tr>
+          <tr><td>Consent and privacy</td><td><code>POST /api/consents</code> and <code>POST /api/privacy</code> record consent plus export/delete requests.</td><td>Automated export package and deletion workflow.</td></tr>
           <tr><td>Localization</td><td>Arabic and English user-facing API responses.</td><td>Translation CMS and reviewer workflow.</td></tr>
           <tr><td>Safety</td><td>Rule-based urgent/watch/normal classification.</td><td>Clinician-approved rule registry and audit trail.</td></tr>
         </tbody>
@@ -291,6 +293,9 @@
           <tr><td>Bilingual response contracts</td><td>Done</td><td><code>lang=ar|en</code> supported in user-facing endpoints.</td></tr>
           <tr><td>Safety-first companion stub</td><td>Done</td><td>No direct model call yet; correct until guardrails and redaction are ready.</td></tr>
           <tr><td>Tracker API contracts</td><td>Done</td><td>Kick and contraction endpoints define MVP data shapes.</td></tr>
+          <tr><td>Supabase initial schema</td><td>Done</td><td>Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests.</td></tr>
+          <tr><td>RLS policies</td><td>Done</td><td>Every user-owned table has owner-only RLS policies.</td></tr>
+          <tr><td>Demo/production split</td><td>Done</td><td>Demo works without auth; production requires Supabase env and Bearer token.</td></tr>
           <tr><td>Build/lint verification</td><td>Done</td><td><code>npm run lint</code> and <code>npm run build</code> pass.</td></tr>
         </tbody>
       </table>
@@ -299,10 +304,10 @@
       <table>
         <thead><tr><th>Priority</th><th>Build</th><th>Why It Matters</th></tr></thead>
         <tbody>
-          <tr><td>P0</td><td>Supabase schema migrations for profiles, pregnancies, check-ins, kicks, contractions, symptoms, weight logs.</td><td>Without persistence, RIFQA cannot become a real tracker.</td></tr>
-          <tr><td>P0</td><td>Auth with anonymous/low-PII mode.</td><td>Matches the privacy promise and removes signup friction.</td></tr>
-          <tr><td>P0</td><td>RLS policies on every user-owned table.</td><td>Non-negotiable for maternal health data.</td></tr>
-          <tr><td>P0</td><td>Consent, export, delete records.</td><td>Needed for trust and PDPL posture.</td></tr>
+          <tr><td>P0</td><td>Supabase project creation and migration execution.</td><td>The schema exists in code but must be applied to the real Supabase project.</td></tr>
+          <tr><td>P0</td><td>Auth UI with anonymous/low-PII mode.</td><td>Matches the privacy promise and removes signup friction.</td></tr>
+          <tr><td>P0</td><td>Frontend API integration for persisted trackers.</td><td>Demo UI is clickable; production UI still needs authenticated API wiring.</td></tr>
+          <tr><td>P0</td><td>Export package and deletion worker.</td><td>Request records exist; actual export/delete processing is next.</td></tr>
           <tr><td>P1</td><td>OpenAI gateway with Arabic safety prompt, redaction, rate limits, and safety override.</td><td>AI should not ship as raw chat completion.</td></tr>
           <tr><td>P1</td><td>Content CMS tables for timeline, care pathways, and resources.</td><td>Medical content must be reviewed and updateable without releases.</td></tr>
           <tr><td>P1</td><td>Visit summary generator.</td><td>Converts logs into practical clinical value.</td></tr>

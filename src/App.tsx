@@ -1,141 +1,140 @@
 import { useMemo, useState } from 'react'
+import type { FormEvent } from 'react'
 import './App.css'
 
-type Screen = 'home' | 'timeline' | 'checkin' | 'companion' | 'support'
+type Screen =
+  | 'home'
+  | 'timeline'
+  | 'checkin'
+  | 'companion'
+  | 'support'
+  | 'journal'
+  | 'contractions'
+  | 'kicks'
+  | 'weight'
+
 type Theme = 'light' | 'dark'
 type Lang = 'ar' | 'en'
-
 type NavItem = { id: Screen; label: string; icon: string }
-type TimelineItem = {
-  week: string
-  label: string
-  status: 'done' | 'current' | 'future'
-  size?: string
-  length?: string
-  weight?: string
-}
+type Tool = { label: string; icon: string; tone: string; target: Screen }
 
 const content = {
   ar: {
     dir: 'rtl',
-    langName: 'العربية',
     langToggle: 'English',
     themeLight: 'تفعيل الوضع الفاتح',
     themeDark: 'تفعيل الوضع الليلي',
+    demo: 'وضع العرض التجريبي',
+    saved: 'تم الحفظ في بيانات العرض التجريبي.',
     nav: [
       { id: 'home', label: 'الرئيسية', icon: 'home' },
       { id: 'timeline', label: 'الجدول', icon: 'calendar_month' },
-      { id: 'checkin', label: 'الفحص اليومي', icon: 'check_circle' },
+      { id: 'checkin', label: 'الفحص', icon: 'check_circle' },
       { id: 'companion', label: 'رفيقة AI', icon: 'chat' },
       { id: 'support', label: 'الدعم', icon: 'health_and_safety' },
     ] satisfies NavItem[],
     header: {
-      date: '١٤ رجب | ٢٥ يناير',
-      greeting: 'أهلاً بكِ، نورة',
+      date: '14 رجب | 25 يناير',
+      greeting: 'أهلا بك، نورة',
     },
     home: {
       weekLabel: 'الأسبوع',
-      week: '٢٨',
+      week: '28',
       progressAria: 'الأسبوع الثامن والعشرون من الحمل',
-      days: '٨٤',
-      daysLabel: 'يوماً للقاء طفلكِ',
+      days: '84',
+      daysLabel: 'يوما للقاء طفلك',
       insightTitle: 'رؤية اليوم',
-      insight:
-        'طفلكِ الآن بحجم حبة الباذنجان. بدأت رئتاه بالنضوج استعداداً للتنفس.',
-      ctaTitle: 'أكملي تسجيلك اليومي',
-      cta:
-        'شاركيناً حالتك المزاجية والأعراض. سنحوّلها إلى خطوة واضحة، لا إلى قلق.',
+      insight: 'طفلك الآن بحجم حبة باذنجان. الرئتان تواصلان النضج، وحركة الطفل تصبح أكثر انتظاما.',
+      ctaTitle: 'أكملي فحصك اليومي',
+      cta: 'شاركي المزاج والنوم والأعراض. رفيقة تحولها إلى خطوة واضحة، لا إلى قلق إضافي.',
       ctaAria: 'بدء الفحص اليومي',
       tools: [
         { label: 'الفحص اليومي', icon: 'how_to_reg', tone: 'violet', target: 'checkin' },
-        { label: 'السجل', icon: 'book_5', tone: 'rose' },
+        { label: 'السجل', icon: 'book_5', tone: 'rose', target: 'journal' },
         { label: 'رفيقة AI', icon: 'chat_bubble', tone: 'primary', target: 'companion' },
-        { label: 'موقت التقلصات', icon: 'timer', tone: 'gold' },
-        { label: 'عد الركلات', icon: 'touch_app', tone: 'teal' },
-        { label: 'الوزن', icon: 'monitor_weight', tone: 'violet' },
-      ],
+        { label: 'موقت التقلصات', icon: 'timer', tone: 'gold', target: 'contractions' },
+        { label: 'عد الركلات', icon: 'touch_app', tone: 'teal', target: 'kicks' },
+        { label: 'الوزن', icon: 'monitor_weight', tone: 'violet', target: 'weight' },
+      ] satisfies Tool[],
     },
     timeline: {
       eyebrow: 'رحلة الحمل',
-      title: 'تطور طفلكِ أسبوعاً بأسبوع',
-      intro: 'مقارنات سعودية مألوفة، ومعلومات قصيرة لا تزدحم عليكِ.',
-      weekPrefix: 'الأسبوع',
-      currentSize: 'حجم طفلك الآن',
-      lengthLabel: 'الطول التقريبي',
-      weightLabel: 'الوزن التقريبي',
-      items: [
-        { week: '٢٢', label: 'اكتشاف الأصوات', status: 'done' },
-        { week: '٢٣', label: 'بدء الحركة', status: 'done' },
-        {
-          week: '٢٤',
-          label: 'تطور السمع',
-          status: 'current',
-          size: 'مثل الرمانة',
-          length: '٣٠ سم',
-          weight: '٦٠٠ جم',
-        },
-        { week: '٢٥', label: 'تطور الرئتين', status: 'future' },
-        { week: '٢٦', label: 'فتح العينين', status: 'future' },
-      ] satisfies TimelineItem[],
+      title: 'تطور طفلك أسبوعا بأسبوع',
+      intro: 'مقارنات مألوفة ومعلومات قصيرة لا تزدحم عليك.',
+      currentSize: 'حجم طفلك الآن مثل الرمانة',
+      length: '30 سم',
+      weight: '600 جم',
+      items: ['اكتشاف الأصوات', 'بدء الحركة', 'تطور السمع', 'تطور الرئتين', 'فتح العينين'],
     },
     checkin: {
       close: 'إغلاق',
       label: 'تسجيل يومي',
-      step: '١ من ٥',
+      step: '1 من 5',
       title: 'كيف تشعرين اليوم؟',
-      intro: 'استمعي لجسدك ومزاجك اليوم. لا توجد إجابة خاطئة.',
+      intro: 'استمعي لجسدك ومزاجك. لا توجد إجابة خاطئة.',
       sleep: 'كيف كان نومك؟',
       low: 'متقطع',
       high: 'جيد',
-      next: 'التالي',
-      moods: [
-        { label: 'سعيدة', icon: 'sentiment_very_satisfied' },
-        { label: 'هادئة', icon: 'sentiment_satisfied' },
-        { label: 'مستقرة', icon: 'sentiment_content' },
-        { label: 'عادية', icon: 'sentiment_neutral' },
-        { label: 'متعبة', icon: 'sentiment_dissatisfied' },
-        { label: 'مرهقة', icon: 'sick' },
-        { label: 'متقلبة', icon: 'mood_bad' },
-      ],
+      next: 'حفظ الفحص',
+      doneTitle: 'تم تسجيل الفحص',
+      doneBody: 'النتيجة التجريبية: لا توجد إشارة عاجلة. ننصح براحة قصيرة وشرب الماء ومتابعة الحركة المعتادة.',
+      moods: ['سعيدة', 'هادئة', 'مستقرة', 'عادية', 'متعبة', 'مرهقة', 'متقلبة'],
     },
     companion: {
       eyebrow: 'رفيقة AI',
       title: 'مساحة آمنة للسؤال والطمأنة',
       aiName: 'رفيقة',
-      userConcern: 'حركة الطفل اليوم أقل من المعتاد.',
-      opening:
-        'أنا معكِ يا نورة. أخبريني بما يقلقك، وسأساعدك بخطوة واضحة ولطيفة.',
-      answer:
-        'أفهم قلقك. ابدئي بجلسة عد الركلات الآن. إذا بقيت الحركة أقل من المعتاد، تواصلي مع طبيبتك أو الطوارئ.',
+      opening: 'أنا معك يا نورة. أخبريني بما يقلقك وسأساعدك بخطوة واضحة ولطيفة.',
+      answer: 'أفهم قلقك. إذا كانت حركة الطفل أقل من المعتاد، ابدئي جلسة عد الركلات. إذا استمرت القلة، تواصلي مع الطبيبة أو الطوارئ.',
       replies: ['ابدئي عد الركلات', 'حضري أسئلة للطبيبة', 'أحتاج تهدئة'],
       input: 'اكتبي ما يدور في بالك...',
-      voice: 'إدخال صوتي',
+      empty: 'اكتبي سؤالك أولا، ثم اضغطي إرسال.',
+      voice: 'تم تشغيل إدخال صوتي تجريبي.',
       send: 'إرسال',
     },
     support: {
       eyebrow: 'الدعم الهادئ',
-      title: 'عندما يصبح اليوم ثقيلاً',
-      intro:
-        'لا نعرض تشخيصاً ولا نضغط عليكِ. فقط خطوات آمنة وواضحة.',
-      safeTitle: 'نحن هنا معكِ',
-      safeText:
-        'خذي نفساً بطيئاً. اختاري شخصاً تثقين به، أو اطلبي دعماً طبياً فوراً إذا شعرتِ أنكِ غير آمنة.',
+      title: 'عندما يصبح اليوم ثقيلا',
+      intro: 'لا تشخيص ولا ضغط. فقط خطوات آمنة وواضحة.',
+      safeTitle: 'نحن هنا معك',
+      safeText: 'خذي نفسا بطيئا. اختاري شخصا تثقين به، أو اطلبي دعما طبيا فورا إذا شعرت أنك غير آمنة.',
       callTrusted: 'اتصلي بشخص تثقين به',
       urgent: 'اعرضي موارد عاجلة',
+      trustedDone: 'تم فتح بطاقة اتصال تجريبية للشخص الموثوق.',
+      urgentDone: 'الموارد العاجلة: اتصلي بالطوارئ أو توجهي لأقرب رعاية عاجلة عند النزيف أو الألم الشديد أو قلة الحركة الواضحة.',
       pathwayTitle: 'من أتواصل معه؟',
       pathway: [
         'أعراض بسيطة ومتكررة: طبيبة النساء أو طب الأسرة.',
-        'نزيف، ألم شديد، أو قلة حركة واضحة: الطوارئ فوراً.',
+        'نزيف أو ألم شديد أو قلة حركة واضحة: الطوارئ فورا.',
         'ضيق نفسي مستمر: مختصة نفسية أو مركز موثوق.',
       ],
+    },
+    utility: {
+      journalTitle: 'السجل الخاص',
+      journalBody: 'ملاحظة اليوم: شعرت نورة بحركة واضحة بعد الغداء وسجلت سؤالا للطبيبة عن النوم.',
+      addEntry: 'إضافة ذكرى',
+      contractionsTitle: 'موقت التقلصات',
+      contractionsBody: 'جلسة تجريبية: 6 تقلصات، متوسط المدة 48 ثانية، كل 5 دقائق.',
+      startTimer: 'بدء الموقت',
+      saveSession: 'حفظ الجلسة',
+      kicksTitle: 'عد الركلات',
+      kicksBody: 'جلسة تجريبية: 10 حركات خلال 42 دقيقة.',
+      addKick: 'إضافة ركلة',
+      endSession: 'إنهاء الجلسة',
+      weightTitle: 'تتبع الوزن',
+      weightBody: 'آخر قراءة: 72.4 كجم. الاتجاه مستقر ولا توجد لغة لوم أو تخويف.',
+      addWeight: 'إضافة وزن',
+      viewTrend: 'عرض الاتجاه',
+      backHome: 'العودة للرئيسية',
     },
   },
   en: {
     dir: 'ltr',
-    langName: 'English',
     langToggle: 'العربية',
     themeLight: 'Switch to light mode',
     themeDark: 'Switch to dark mode',
+    demo: 'Demo environment',
+    saved: 'Saved to seeded demo data.',
     nav: [
       { id: 'home', label: 'Home', icon: 'home' },
       { id: 'timeline', label: 'Timeline', icon: 'calendar_month' },
@@ -154,94 +153,88 @@ const content = {
       days: '84',
       daysLabel: 'days until you meet your baby',
       insightTitle: "Today's insight",
-      insight:
-        'Your baby is now about the size of an eggplant. The lungs are maturing in preparation for breathing.',
+      insight: 'Your baby is about the size of an eggplant. The lungs are maturing and movement patterns are becoming clearer.',
       ctaTitle: 'Complete your daily check-in',
-      cta:
-        'Share your mood and symptoms. RIFQA turns them into a clear next step, not extra worry.',
+      cta: 'Share mood, sleep, and symptoms. RIFQA turns them into a clear next step, not extra worry.',
       ctaAria: 'Start daily check-in',
       tools: [
         { label: 'Daily check-in', icon: 'how_to_reg', tone: 'violet', target: 'checkin' },
-        { label: 'Journal', icon: 'book_5', tone: 'rose' },
+        { label: 'Journal', icon: 'book_5', tone: 'rose', target: 'journal' },
         { label: 'RIFQA AI', icon: 'chat_bubble', tone: 'primary', target: 'companion' },
-        { label: 'Contraction timer', icon: 'timer', tone: 'gold' },
-        { label: 'Kick counter', icon: 'touch_app', tone: 'teal' },
-        { label: 'Weight', icon: 'monitor_weight', tone: 'violet' },
-      ],
+        { label: 'Contraction timer', icon: 'timer', tone: 'gold', target: 'contractions' },
+        { label: 'Kick counter', icon: 'touch_app', tone: 'teal', target: 'kicks' },
+        { label: 'Weight', icon: 'monitor_weight', tone: 'violet', target: 'weight' },
+      ] satisfies Tool[],
     },
     timeline: {
       eyebrow: 'Pregnancy journey',
       title: 'Your baby, week by week',
       intro: 'Saudi-familiar size comparisons and short, calm updates.',
-      weekPrefix: 'Week',
-      currentSize: 'Your baby is now',
-      lengthLabel: 'Approx. length',
-      weightLabel: 'Approx. weight',
-      items: [
-        { week: '22', label: 'Sound discovery', status: 'done' },
-        { week: '23', label: 'Movement begins', status: 'done' },
-        {
-          week: '24',
-          label: 'Hearing development',
-          status: 'current',
-          size: 'the size of a pomegranate',
-          length: '30 cm',
-          weight: '600 g',
-        },
-        { week: '25', label: 'Lung development', status: 'future' },
-        { week: '26', label: 'Eyes opening', status: 'future' },
-      ] satisfies TimelineItem[],
+      currentSize: 'Your baby is now the size of a pomegranate',
+      length: '30 cm',
+      weight: '600 g',
+      items: ['Sound discovery', 'Movement begins', 'Hearing development', 'Lung development', 'Eyes opening'],
     },
     checkin: {
       close: 'Close',
       label: 'Daily check-in',
       step: '1 of 5',
       title: 'How are you feeling today?',
-      intro: 'Listen to your body and mood today. There is no wrong answer.',
+      intro: 'Listen to your body and mood. There is no wrong answer.',
       sleep: 'How was your sleep?',
       low: 'Interrupted',
       high: 'Good',
-      next: 'Next',
-      moods: [
-        { label: 'Happy', icon: 'sentiment_very_satisfied' },
-        { label: 'Calm', icon: 'sentiment_satisfied' },
-        { label: 'Steady', icon: 'sentiment_content' },
-        { label: 'Okay', icon: 'sentiment_neutral' },
-        { label: 'Tired', icon: 'sentiment_dissatisfied' },
-        { label: 'Drained', icon: 'sick' },
-        { label: 'Mixed', icon: 'mood_bad' },
-      ],
+      next: 'Save check-in',
+      doneTitle: 'Check-in saved',
+      doneBody: 'Demo result: no urgent signal. Try a short rest, drink water, and keep watching your usual movement pattern.',
+      moods: ['Happy', 'Calm', 'Steady', 'Okay', 'Tired', 'Drained', 'Mixed'],
     },
     companion: {
       eyebrow: 'RIFQA AI',
       title: 'A safe space for questions and reassurance',
       aiName: 'RIFQA',
-      userConcern: "The baby's movement feels lower than usual today.",
-      opening:
-        "I am here with you, Noura. Tell me what is worrying you and I will help with a gentle, clear next step.",
-      answer:
-        'I understand why that feels worrying. Start a kick-count session now. If movement remains lower than usual, contact your doctor or emergency care.',
+      opening: 'I am here with you, Noura. Tell me what is worrying you and I will help with a gentle, clear next step.',
+      answer: 'I understand why that feels worrying. If movement feels lower than usual, start a kick-count session. If it remains low, contact your clinician or emergency care.',
       replies: ['Start kick count', 'Prepare doctor questions', 'I need grounding'],
       input: 'Write what is on your mind...',
-      voice: 'Voice input',
+      empty: 'Write a question first, then tap send.',
+      voice: 'Demo voice input opened.',
       send: 'Send',
     },
     support: {
       eyebrow: 'Calm support',
       title: 'When the day feels heavy',
-      intro:
-        'No diagnosis and no pressure. Just safe, clear steps.',
+      intro: 'No diagnosis and no pressure. Just safe, clear steps.',
       safeTitle: 'We are here with you',
-      safeText:
-        'Take one slow breath. Choose someone you trust, or seek urgent medical support if you feel unsafe.',
+      safeText: 'Take one slow breath. Choose someone you trust, or seek urgent medical support if you feel unsafe.',
       callTrusted: 'Call someone you trust',
       urgent: 'Show urgent resources',
+      trustedDone: 'Opened a demo trusted-contact card.',
+      urgentDone: 'Urgent resources: call emergency care or go to urgent care for bleeding, severe pain, or clearly reduced movement.',
       pathwayTitle: 'Who should I contact?',
       pathway: [
         'Mild repeated symptoms: your OB or family physician.',
         'Bleeding, severe pain, or clearly reduced movement: emergency care now.',
         'Ongoing emotional distress: a mental health specialist or trusted center.',
       ],
+    },
+    utility: {
+      journalTitle: 'Private journal',
+      journalBody: 'Today: Noura felt clear movement after lunch and saved one sleep question for her clinician.',
+      addEntry: 'Add memory',
+      contractionsTitle: 'Contraction timer',
+      contractionsBody: 'Demo session: 6 contractions, average duration 48 seconds, every 5 minutes.',
+      startTimer: 'Start timer',
+      saveSession: 'Save session',
+      kicksTitle: 'Kick counter',
+      kicksBody: 'Demo session: 10 movements in 42 minutes.',
+      addKick: 'Add kick',
+      endSession: 'End session',
+      weightTitle: 'Weight tracker',
+      weightBody: 'Latest entry: 72.4 kg. Trend is steady, with no shaming language.',
+      addWeight: 'Add weight',
+      viewTrend: 'View trend',
+      backHome: 'Back home',
     },
   },
 }
@@ -262,18 +255,27 @@ function App() {
   const [screen, setScreen] = useState<Screen>('home')
   const [theme, setTheme] = useState<Theme>('light')
   const [lang, setLang] = useState<Lang>('ar')
+  const [selectedMood, setSelectedMood] = useState(content.ar.checkin.moods[0])
+  const [notice, setNotice] = useState(content.ar.demo)
   const t = content[lang]
-  const [selectedMood, setSelectedMood] = useState(t.checkin.moods[0].label)
 
   const activeTitle = useMemo(
-    () => t.nav.find((item) => item.id === screen)?.label ?? t.nav[0].label,
-    [screen, t.nav],
+    () => t.nav.find((item) => item.id === screen)?.label ?? t.home.tools.find((tool) => tool.target === screen)?.label ?? t.nav[0].label,
+    [screen, t],
   )
+
+  const showNotice = (message: string) => setNotice(message)
+
+  const navigate = (target: Screen) => {
+    setScreen(target)
+    showNotice(t.demo)
+  }
 
   const toggleLang = () => {
     const next = lang === 'ar' ? 'en' : 'ar'
     setLang(next)
-    setSelectedMood(content[next].checkin.moods[0].label)
+    setSelectedMood(content[next].checkin.moods[0])
+    setNotice(content[next].demo)
   }
 
   return (
@@ -288,7 +290,7 @@ function App() {
           <button
             key={item.id}
             className={`rail-button ${screen === item.id ? 'active' : ''}`}
-            onClick={() => setScreen(item.id)}
+            onClick={() => navigate(item.id)}
             type="button"
             title={item.label}
           >
@@ -307,20 +309,33 @@ function App() {
         />
 
         <section className="screen-content">
-          {screen === 'home' && <HomeScreen t={t} onNavigate={setScreen} />}
+          <div className="demo-pill">{notice}</div>
+          {screen === 'home' && <HomeScreen t={t} onNavigate={navigate} />}
           {screen === 'timeline' && <TimelineScreen t={t} />}
           {screen === 'checkin' && (
             <CheckInScreen
               t={t}
               selectedMood={selectedMood}
               onSelectMood={setSelectedMood}
+              onClose={() => navigate('home')}
+              onSave={() => showNotice(t.saved)}
             />
           )}
-          {screen === 'companion' && <CompanionScreen t={t} />}
-          {screen === 'support' && <SupportScreen t={t} />}
+          {screen === 'companion' && (
+            <CompanionScreen
+              t={t}
+              onNavigate={navigate}
+              onNotice={showNotice}
+            />
+          )}
+          {screen === 'support' && <SupportScreen t={t} onNotice={showNotice} />}
+          {screen === 'journal' && <UtilityScreen title={t.utility.journalTitle} body={t.utility.journalBody} icon="book_5" primary={t.utility.addEntry} secondary={t.utility.backHome} onPrimary={() => showNotice(t.saved)} onSecondary={() => navigate('home')} />}
+          {screen === 'contractions' && <UtilityScreen title={t.utility.contractionsTitle} body={t.utility.contractionsBody} icon="timer" primary={t.utility.startTimer} secondary={t.utility.saveSession} onPrimary={() => showNotice(t.utility.contractionsBody)} onSecondary={() => showNotice(t.saved)} />}
+          {screen === 'kicks' && <UtilityScreen title={t.utility.kicksTitle} body={t.utility.kicksBody} icon="touch_app" primary={t.utility.addKick} secondary={t.utility.endSession} onPrimary={() => showNotice(t.utility.kicksBody)} onSecondary={() => showNotice(t.saved)} />}
+          {screen === 'weight' && <UtilityScreen title={t.utility.weightTitle} body={t.utility.weightBody} icon="monitor_weight" primary={t.utility.addWeight} secondary={t.utility.viewTrend} onPrimary={() => showNotice(t.saved)} onSecondary={() => showNotice(t.utility.weightBody)} />}
         </section>
 
-        <BottomNav active={screen} items={t.nav} onNavigate={setScreen} />
+        <BottomNav active={screen} items={t.nav} onNavigate={navigate} />
       </main>
     </div>
   )
@@ -366,13 +381,7 @@ function Header({
   )
 }
 
-function HomeScreen({
-  t,
-  onNavigate,
-}: {
-  t: (typeof content)[Lang]
-  onNavigate: (screen: Screen) => void
-}) {
+function HomeScreen({ t, onNavigate }: { t: (typeof content)[Lang]; onNavigate: (screen: Screen) => void }) {
   return (
     <div className="home-screen">
       <section className="progress-hero">
@@ -401,14 +410,7 @@ function HomeScreen({
 
       <section className="tool-grid" aria-label={t.home.insightTitle}>
         {t.home.tools.map((tool) => (
-          <button
-            key={tool.label}
-            type="button"
-            className="tool-card glass-card"
-            onClick={() => {
-              if (tool.target) onNavigate(tool.target as Screen)
-            }}
-          >
+          <button key={tool.label} type="button" className="tool-card glass-card" onClick={() => onNavigate(tool.target)}>
             <span className={`tool-icon ${tool.tone}`}>
               <Icon name={tool.icon} />
             </span>
@@ -438,37 +440,26 @@ function TimelineScreen({ t }: { t: (typeof content)[Lang] }) {
         <h2>{t.timeline.title}</h2>
         <p>{t.timeline.intro}</p>
       </div>
-
       <div className="timeline-list">
-        {t.timeline.items.map((item) => (
-          <article key={item.week} className={`timeline-item ${item.status}`}>
-            <div className="timeline-node">
-              {item.status === 'done' ? <Icon name="check" filled /> : item.week}
-            </div>
+        {t.timeline.items.map((item, index) => (
+          <article key={item} className={`timeline-item ${index < 2 ? 'done' : index === 2 ? 'current' : 'future'}`}>
+            <div className="timeline-node">{index < 2 ? <Icon name="check" filled /> : index + 22}</div>
             <div className="glass-card timeline-card">
               <div className="timeline-topline">
-                <span>
-                  {t.timeline.weekPrefix} {item.week}
-                </span>
-                <strong>{item.label}</strong>
+                <span>{index + 22}</span>
+                <strong>{item}</strong>
               </div>
-              {item.status === 'current' && (
+              {index === 2 && (
                 <>
                   <div className="pomegranate" aria-hidden="true">
                     <span />
                     <span />
                     <span />
                   </div>
-                  <h3>
-                    {t.timeline.currentSize} {item.size}
-                  </h3>
+                  <h3>{t.timeline.currentSize}</h3>
                   <div className="baby-stats">
-                    <span>
-                      {t.timeline.lengthLabel} <strong>{item.length}</strong>
-                    </span>
-                    <span>
-                      {t.timeline.weightLabel} <strong>{item.weight}</strong>
-                    </span>
+                    <span>{t.timeline.length}</span>
+                    <span>{t.timeline.weight}</span>
                   </div>
                 </>
               )}
@@ -484,41 +475,51 @@ function CheckInScreen({
   t,
   selectedMood,
   onSelectMood,
+  onClose,
+  onSave,
 }: {
   t: (typeof content)[Lang]
   selectedMood: string
   onSelectMood: (mood: string) => void
+  onClose: () => void
+  onSave: () => void
 }) {
+  const [done, setDone] = useState(false)
+
+  const save = () => {
+    setDone(true)
+    onSave()
+  }
+
   return (
     <div className="checkin-screen">
       <div className="flow-header">
-        <button className="icon-button" type="button" aria-label={t.checkin.close}>
+        <button className="icon-button" type="button" aria-label={t.checkin.close} onClick={onClose}>
           <Icon name="close" />
         </button>
         <span>{t.checkin.label}</span>
         <div />
       </div>
-
       <div className="progress-line" aria-hidden="true">
         <span />
       </div>
       <p className="step-count">{t.checkin.step}</p>
 
       <section className="glass-card check-card">
-        <h2>{t.checkin.title}</h2>
-        <p>{t.checkin.intro}</p>
+        <h2>{done ? t.checkin.doneTitle : t.checkin.title}</h2>
+        <p>{done ? t.checkin.doneBody : t.checkin.intro}</p>
         <div className="mood-row">
-          {t.checkin.moods.map((mood) => (
+          {t.checkin.moods.map((mood, index) => (
             <button
-              key={mood.label}
+              key={mood}
               type="button"
-              className={`mood-option ${selectedMood === mood.label ? 'selected' : ''}`}
-              onClick={() => onSelectMood(mood.label)}
+              className={`mood-option ${selectedMood === mood ? 'selected' : ''}`}
+              onClick={() => onSelectMood(mood)}
             >
               <span>
-                <Icon name={mood.icon} filled={selectedMood === mood.label} />
+                <Icon name={['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_content', 'sentiment_neutral', 'sentiment_dissatisfied', 'sick', 'mood_bad'][index]} filled={selectedMood === mood} />
               </span>
-              {mood.label}
+              {mood}
             </button>
           ))}
         </div>
@@ -533,7 +534,7 @@ function CheckInScreen({
         </div>
       </section>
 
-      <button className="primary-button" type="button">
+      <button className="primary-button" type="button" onClick={save}>
         {t.checkin.next}
         <Icon name="arrow_back" />
       </button>
@@ -541,41 +542,66 @@ function CheckInScreen({
   )
 }
 
-function CompanionScreen({ t }: { t: (typeof content)[Lang] }) {
+function CompanionScreen({
+  t,
+  onNavigate,
+  onNotice,
+}: {
+  t: (typeof content)[Lang]
+  onNavigate: (screen: Screen) => void
+  onNotice: (message: string) => void
+}) {
+  const [messages, setMessages] = useState([t.companion.answer])
+  const [draft, setDraft] = useState('')
+
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
+    const message = draft.trim()
+    if (!message) {
+      onNotice(t.companion.empty)
+      return
+    }
+    setMessages((current) => [...current, message, t.companion.answer])
+    setDraft('')
+    onNotice(t.saved)
+  }
+
+  const quickReply = (reply: string) => {
+    if (reply === t.companion.replies[0]) onNavigate('kicks')
+    else if (reply === t.companion.replies[1]) onNavigate('journal')
+    else onNavigate('support')
+  }
+
   return (
     <div className="companion-screen">
       <div className="screen-heading">
         <span className="eyebrow">{t.companion.eyebrow}</span>
         <h2>{t.companion.title}</h2>
       </div>
-
       <div className="chat-thread">
         <article className="bubble ai">
           <strong>{t.companion.aiName}</strong>
           <p>{t.companion.opening}</p>
         </article>
-        <article className="bubble user">
-          <p>{t.companion.userConcern}</p>
-        </article>
-        <article className="bubble ai">
-          <strong>{t.companion.aiName}</strong>
-          <p>{t.companion.answer}</p>
-        </article>
+        {messages.map((message, index) => (
+          <article key={`${message}-${index}`} className={`bubble ${index % 2 === 0 ? 'ai' : 'user'}`}>
+            {index % 2 === 0 && <strong>{t.companion.aiName}</strong>}
+            <p>{message}</p>
+          </article>
+        ))}
       </div>
-
       <div className="quick-replies">
         {t.companion.replies.map((reply) => (
-          <button key={reply} type="button">
+          <button key={reply} type="button" onClick={() => quickReply(reply)}>
             {reply}
           </button>
         ))}
       </div>
-
-      <form className="chat-input">
-        <button type="button" aria-label={t.companion.voice}>
+      <form className="chat-input" onSubmit={submit}>
+        <button type="button" aria-label={t.companion.voice} onClick={() => onNotice(t.companion.voice)}>
           <Icon name="mic" />
         </button>
-        <input type="text" placeholder={t.companion.input} />
+        <input type="text" placeholder={t.companion.input} value={draft} onChange={(event) => setDraft(event.target.value)} />
         <button type="submit" aria-label={t.companion.send}>
           <Icon name="send" />
         </button>
@@ -584,7 +610,7 @@ function CompanionScreen({ t }: { t: (typeof content)[Lang] }) {
   )
 }
 
-function SupportScreen({ t }: { t: (typeof content)[Lang] }) {
+function SupportScreen({ t, onNotice }: { t: (typeof content)[Lang]; onNotice: (message: string) => void }) {
   return (
     <div className="support-screen">
       <div className="screen-heading teal">
@@ -592,50 +618,67 @@ function SupportScreen({ t }: { t: (typeof content)[Lang] }) {
         <h2>{t.support.title}</h2>
         <p>{t.support.intro}</p>
       </div>
-
       <section className="safe-mode glass-card">
         <div className="breathing-circle" aria-hidden="true" />
         <h3>{t.support.safeTitle}</h3>
         <p>{t.support.safeText}</p>
         <div className="support-actions">
-          <button type="button">{t.support.callTrusted}</button>
-          <button type="button">{t.support.urgent}</button>
+          <button type="button" onClick={() => onNotice(t.support.trustedDone)}>{t.support.callTrusted}</button>
+          <button type="button" onClick={() => onNotice(t.support.urgentDone)}>{t.support.urgent}</button>
         </div>
       </section>
-
       <section className="glass-card pathway-card">
         <div className="card-title">
           <Icon name="local_hospital" />
           <span>{t.support.pathwayTitle}</span>
         </div>
         <ul>
-          {t.support.pathway.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
+          {t.support.pathway.map((item) => <li key={item}>{item}</li>)}
         </ul>
       </section>
     </div>
   )
 }
 
-function BottomNav({
-  active,
-  items,
-  onNavigate,
+function UtilityScreen({
+  title,
+  body,
+  icon,
+  primary,
+  secondary,
+  onPrimary,
+  onSecondary,
 }: {
-  active: Screen
-  items: NavItem[]
-  onNavigate: (screen: Screen) => void
+  title: string
+  body: string
+  icon: string
+  primary: string
+  secondary: string
+  onPrimary: () => void
+  onSecondary: () => void
 }) {
+  return (
+    <div className="utility-screen">
+      <section className="glass-card utility-card">
+        <span className="utility-icon">
+          <Icon name={icon} />
+        </span>
+        <h2>{title}</h2>
+        <p>{body}</p>
+        <div className="utility-actions">
+          <button type="button" onClick={onPrimary}>{primary}</button>
+          <button type="button" onClick={onSecondary}>{secondary}</button>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function BottomNav({ active, items, onNavigate }: { active: Screen; items: NavItem[]; onNavigate: (screen: Screen) => void }) {
   return (
     <nav className="bottom-nav" aria-label="navigation">
       {items.map((item) => (
-        <button
-          key={item.id}
-          type="button"
-          className={active === item.id ? 'active' : ''}
-          onClick={() => onNavigate(item.id)}
-        >
+        <button key={item.id} type="button" className={active === item.id ? 'active' : ''} onClick={() => onNavigate(item.id)}>
           <Icon name={item.icon} filled={active === item.id} />
           <span>{item.label}</span>
         </button>
