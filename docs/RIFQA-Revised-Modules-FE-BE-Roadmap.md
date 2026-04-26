@@ -288,7 +288,51 @@ Open community, full marketplace, complex gamification, insurer integrations, un
 | 7.3 Quality dashboards | Crash, latency, failed sync, AI safety incidents | Production alerts defined |
 | 7.4 Research exports | De-identified cohort data for clinical validation | Approval workflow before export |
 
-## 8. Suggested Release Plan
+## 8. Backend Development Status
+
+### Current BE Slice: Vercel API Foundation
+
+This repo has now moved from frontend-only prototype to a deployable Vercel full-stack foundation. The backend is intentionally thin but production-shaped: route contracts, validation boundaries, deterministic safety rules, localized responses, and a clear persistence handoff to Supabase.
+
+| Area | Implemented Now | Still Missing |
+|---|---|---|
+| API runtime | Vercel serverless routes under `api/` | Supabase project, database migrations, RLS policies |
+| Health and bootstrap | `GET /api/health`, `GET /api/bootstrap?lang=ar|en` | Environment checks, CMS-backed bootstrap payloads |
+| Profile | `GET /api/profile`, `PUT /api/profile` with clamped pregnancy week | Authenticated user identity, persisted profile updates |
+| Daily check-ins | `POST /api/checkins?lang=ar|en` with mood, sleep, symptoms, safety assessment | Stored check-ins, trends, screening templates |
+| AI companion | `POST /api/companion?lang=ar|en` safety-first rules stub | OpenAI gateway, prompt versions, redaction, model telemetry |
+| Kick counter | `POST /api/kick-sessions?lang=ar|en` with reduced-movement guidance | Session persistence, reminders, history charts |
+| Contraction counter | `POST /api/contractions?lang=ar|en` with pattern guidance | Labor session persistence, clinician export |
+| Localization | Arabic and English API responses | Translation CMS and reviewer workflow |
+| Safety | Rule-based urgent/watch/normal classification | Clinician-approved rule registry and audit trail |
+
+### BE Phase 0A: Done in Code
+
+| Item | Status | Notes |
+|---|---|---|
+| Serverless API structure | Done | `api/_lib` contains shared HTTP, content, and safety helpers |
+| Bilingual response contracts | Done | `lang=ar|en` supported in user-facing endpoints |
+| Safety-first companion stub | Done | No direct model call yet, which is correct until guardrails and redaction are ready |
+| Tracker API contracts | Done | Kick and contraction endpoints define MVP data shapes |
+| Build/lint verification | Done | `npm run lint` and `npm run build` pass |
+
+### BE Phase 0B: Next Required Backend Work
+
+| Priority | Build | Why It Matters |
+|---|---|---|
+| P0 | Supabase schema migrations for profiles, pregnancies, check-ins, kicks, contractions, symptoms, weight logs | Without persistence, RIFQA cannot become a real tracker |
+| P0 | Auth with anonymous/low-PII mode | Matches the privacy promise and removes signup friction |
+| P0 | RLS policies on every user-owned table | Non-negotiable for maternal health data |
+| P0 | Consent, export, delete records | Needed for trust and PDPL posture |
+| P1 | OpenAI gateway with Arabic safety prompt, redaction, rate limits, and safety override | AI should not ship as raw chat completion |
+| P1 | Content CMS tables for timeline, care pathways, and resources | Medical content must be reviewed and updateable without releases |
+| P1 | Visit summary generator | Converts logs into practical clinical value |
+
+### Blunt Backend Warning
+
+The current backend is a good first move, not a real health-data backend yet. The next milestone must be persistence plus RLS. AI can wait; storing the mother's core journey safely cannot.
+
+## 9. Suggested Release Plan
 
 ### Alpha: Saudi Foundation
 
@@ -326,7 +370,7 @@ Goal: become the maternal health platform.
 
 Ships: telehealth partners, moderated community, registry, academic validation, advanced personalization, aggregate B2B insights.
 
-## 9. Non-Negotiable Product Rules
+## 10. Non-Negotiable Product Rules
 
 1. Do not launch publicly without contraction counter, kick counter, and weight tracking.
 2. Do not paywall crisis, distress, or urgent guidance.
