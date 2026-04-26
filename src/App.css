@@ -315,8 +315,10 @@
   display: grid;
   place-items: center;
   align-content: center;
+  justify-items: center;
   gap: 10px;
   font: inherit;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -327,6 +329,15 @@
   display: grid;
   place-items: center;
   color: white;
+  overflow: hidden;
+}
+
+.tool-icon .material-symbols-outlined {
+  width: 1em;
+  height: 1em;
+  display: grid;
+  place-items: center;
+  line-height: 1;
 }
 
 .tool-icon.primary { background: linear-gradient(145deg, var(--primary), var(--violet)); }

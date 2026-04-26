@@ -49,7 +49,7 @@ const content = {
       tools: [
         { label: 'الفحص اليومي', icon: 'how_to_reg', tone: 'violet', target: 'checkin' },
         { label: 'السجل', icon: 'book_5', tone: 'rose' },
-        { label: 'رفيقة AI', icon: 'chat_spark', tone: 'primary', target: 'companion' },
+        { label: 'رفيقة AI', icon: 'chat_bubble', tone: 'primary', target: 'companion' },
         { label: 'موقت التقلصات', icon: 'timer', tone: 'gold' },
         { label: 'عد الركلات', icon: 'touch_app', tone: 'teal' },
         { label: 'الوزن', icon: 'monitor_weight', tone: 'violet' },
@@ -163,7 +163,7 @@ const content = {
       tools: [
         { label: 'Daily check-in', icon: 'how_to_reg', tone: 'violet', target: 'checkin' },
         { label: 'Journal', icon: 'book_5', tone: 'rose' },
-        { label: 'RIFQA AI', icon: 'chat_spark', tone: 'primary', target: 'companion' },
+        { label: 'RIFQA AI', icon: 'chat_bubble', tone: 'primary', target: 'companion' },
         { label: 'Contraction timer', icon: 'timer', tone: 'gold' },
         { label: 'Kick counter', icon: 'touch_app', tone: 'teal' },
         { label: 'Weight', icon: 'monitor_weight', tone: 'violet' },
