@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getLang, readNumber, sendJson, sendMethodNotAllowed } from './_lib/http'
+import { getLang, readNumber, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return sendMethodNotAllowed(res, ['POST'])
@@ -27,4 +27,3 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     },
   })
 }
-

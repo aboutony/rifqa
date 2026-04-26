@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sendJson, sendMethodNotAllowed } from './_lib/http'
+import { sendJson, sendMethodNotAllowed } from './_lib/http.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') return sendMethodNotAllowed(res, ['GET'])
@@ -11,4 +11,3 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     timestamp: new Date().toISOString(),
   })
 }
-

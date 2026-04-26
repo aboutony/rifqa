@@ -1,4 +1,4 @@
-import type { ApiLang } from './http'
+import type { ApiLang } from './http.js'
 
 export type SafetyLevel = 'normal' | 'watch' | 'urgent'
 
@@ -116,4 +116,3 @@ export function assessCheckin({
     nextActions: lang === 'ar' ? ['حفظ الفحص'] : ['Save check-in'],
   }
 }
-

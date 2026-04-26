@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { assessCheckin } from './_lib/safety'
-import { getLang, readNumber, readString, sendJson, sendMethodNotAllowed } from './_lib/http'
+import { assessCheckin } from './_lib/safety.js'
+import { getLang, readNumber, readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return sendMethodNotAllowed(res, ['POST'])

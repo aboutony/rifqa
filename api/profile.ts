@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { demoProfile } from './_lib/content'
-import { readNumber, readString, sendJson, sendMethodNotAllowed } from './_lib/http'
+import { demoProfile } from './_lib/content.js'
+import { readNumber, readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
@@ -27,4 +27,3 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   return sendMethodNotAllowed(res, ['GET', 'PUT'])
 }
-

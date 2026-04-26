@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getBootstrapContent } from './_lib/content'
-import { getLang, sendJson, sendMethodNotAllowed } from './_lib/http'
+import { getBootstrapContent } from './_lib/content.js'
+import { getLang, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') return sendMethodNotAllowed(res, ['GET'])
@@ -9,4 +9,3 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     data: getBootstrapContent(getLang(req)),
   })
 }
-

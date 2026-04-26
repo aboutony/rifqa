@@ -1,4 +1,4 @@
-import type { ApiLang } from './http'
+import type { ApiLang } from './http.js'
 
 export type JourneyProfile = {
   id: string
@@ -142,4 +142,3 @@ export function getBootstrapContent(lang: ApiLang) {
     ],
   }
 }
-
