@@ -2,6 +2,45 @@ import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
 
+type SpeechRecognitionResultAlternative = {
+  transcript: string
+}
+
+type SpeechRecognitionResult = {
+  readonly length: number
+  item(index: number): SpeechRecognitionResultAlternative
+  [index: number]: SpeechRecognitionResultAlternative
+}
+
+type SpeechRecognitionResultList = {
+  readonly length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+type SpeechRecognitionEvent = Event & {
+  results: SpeechRecognitionResultList
+}
+
+type SpeechRecognitionInstance = EventTarget & {
+  lang: string
+  interimResults: boolean
+  continuous: boolean
+  start: () => void
+  stop: () => void
+  onstart: (() => void) | null
+  onend: (() => void) | null
+  onerror: ((event: Event) => void) | null
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance
+
+type SpeechWindow = Window & {
+  SpeechRecognition?: SpeechRecognitionConstructor
+  webkitSpeechRecognition?: SpeechRecognitionConstructor
+}
+
 type Screen =
   | 'home'
   | 'timeline'
@@ -19,6 +58,7 @@ type Theme = 'light' | 'dark'
 type Lang = 'ar' | 'en'
 type NavItem = { id: Screen; label: string; icon: string }
 type Tool = { label: string; icon: string; tone: string; target: Screen }
+type ChatMessage = { role: 'ai' | 'user'; text: string }
 
 const content = {
   ar: {
@@ -93,7 +133,13 @@ const content = {
       replies: ['ابدئي عد الركلات', 'حضري أسئلة للطبيبة', 'أحتاج تهدئة'],
       input: 'اكتبي ما يدور في بالك...',
       empty: 'اكتبي سؤالك أولا، ثم اضغطي إرسال.',
-      voice: 'تم تشغيل إدخال صوتي تجريبي.',
+      voice: 'تحدثي الآن',
+      listening: 'أستمع الآن...',
+      voiceUnsupported: 'المتصفح لا يدعم التعرف الصوتي المجاني. يمكنك الكتابة بدلا من ذلك.',
+      aiThinking: 'رفقة تفكر في رد آمن...',
+      speakReply: 'تشغيل الرد صوتيا',
+      stopVoice: 'إيقاف الصوت',
+      voiceReady: 'تم التقاط الصوت وإرساله إلى رفقة.',
       send: 'إرسال',
     },
     support: {
@@ -212,7 +258,13 @@ const content = {
       replies: ['Start kick count', 'Prepare doctor questions', 'I need grounding'],
       input: 'Write what is on your mind...',
       empty: 'Write a question first, then tap send.',
-      voice: 'Demo voice input opened.',
+      voice: 'Speak now',
+      listening: 'Listening...',
+      voiceUnsupported: 'This browser does not support free speech recognition. You can type instead.',
+      aiThinking: 'RIFQA is preparing a safe reply...',
+      speakReply: 'Speak reply',
+      stopVoice: 'Stop voice',
+      voiceReady: 'Voice captured and sent to RIFQA.',
       send: 'Send',
     },
     support: {
@@ -575,8 +627,39 @@ function CompanionScreen({
   onNavigate: (screen: Screen) => void
   onNotice: (message: string) => void
 }) {
-  const [messages, setMessages] = useState([t.companion.answer])
+  const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'ai', text: t.companion.answer }])
   const [draft, setDraft] = useState('')
+  const [isListening, setIsListening] = useState(false)
+  const [isThinking, setIsThinking] = useState(false)
+
+  const speak = (text: string) => {
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = t.dir === 'rtl' ? 'ar-SA' : 'en-US'
+    utterance.rate = 0.94
+    window.speechSynthesis.speak(utterance)
+  }
+
+  const sendMessage = async (message: string, shouldSpeak = false) => {
+    setMessages((current) => [...current, { role: 'user', text: message }])
+    setIsThinking(true)
+    try {
+      const response = await fetch(`/api/companion?lang=${t.dir === 'rtl' ? 'ar' : 'en'}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      })
+      const payload = (await response.json()) as { data?: { reply?: string } }
+      const reply = payload.data?.reply || t.companion.answer
+      setMessages((current) => [...current, { role: 'ai', text: reply }])
+      if (shouldSpeak) speak(reply)
+    } catch {
+      setMessages((current) => [...current, { role: 'ai', text: t.companion.answer }])
+      if (shouldSpeak) speak(t.companion.answer)
+    } finally {
+      setIsThinking(false)
+    }
+  }
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
@@ -585,15 +668,48 @@ function CompanionScreen({
       onNotice(t.companion.empty)
       return
     }
-    setMessages((current) => [...current, message, t.companion.answer])
     setDraft('')
-    onNotice(t.saved)
+    void sendMessage(message)
   }
 
   const quickReply = (reply: string) => {
     if (reply === t.companion.replies[0]) onNavigate('kicks')
     else if (reply === t.companion.replies[1]) onNavigate('journal')
     else onNavigate('support')
+  }
+
+  const startVoiceConversation = () => {
+    const speechWindow = window as SpeechWindow
+    const Recognition = speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition
+    if (!Recognition) {
+      onNotice(t.companion.voiceUnsupported)
+      return
+    }
+
+    const recognition = new Recognition()
+    recognition.lang = t.dir === 'rtl' ? 'ar-SA' : 'en-US'
+    recognition.interimResults = false
+    recognition.continuous = false
+    recognition.onstart = () => {
+      setIsListening(true)
+      onNotice(t.companion.listening)
+    }
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => {
+      setIsListening(false)
+      onNotice(t.companion.voiceUnsupported)
+    }
+    recognition.onresult = (event) => {
+      const transcript = event.results[0]?.[0]?.transcript?.trim()
+      if (!transcript) {
+        onNotice(t.companion.empty)
+        return
+      }
+      setDraft('')
+      onNotice(t.companion.voiceReady)
+      void sendMessage(transcript, true)
+    }
+    recognition.start()
   }
 
   return (
@@ -608,11 +724,23 @@ function CompanionScreen({
           <p>{t.companion.opening}</p>
         </article>
         {messages.map((message, index) => (
-          <article key={`${message}-${index}`} className={`bubble ${index % 2 === 0 ? 'ai' : 'user'}`}>
-            {index % 2 === 0 && <strong>{t.companion.aiName}</strong>}
-            <p>{message}</p>
+          <article key={`${message.text}-${index}`} className={`bubble ${message.role}`}>
+            {message.role === 'ai' && <strong>{t.companion.aiName}</strong>}
+            <p>{message.text}</p>
+            {message.role === 'ai' && (
+              <button className="speak-button" type="button" onClick={() => speak(message.text)}>
+                <Icon name="volume_up" />
+                {t.companion.speakReply}
+              </button>
+            )}
           </article>
         ))}
+        {isThinking && (
+          <article className="bubble ai">
+            <strong>{t.companion.aiName}</strong>
+            <p>{t.companion.aiThinking}</p>
+          </article>
+        )}
       </div>
       <div className="quick-replies">
         {t.companion.replies.map((reply) => (
@@ -622,14 +750,23 @@ function CompanionScreen({
         ))}
       </div>
       <form className="chat-input" onSubmit={submit}>
-        <button type="button" aria-label={t.companion.voice} onClick={() => onNotice(t.companion.voice)}>
-          <Icon name="mic" />
+        <button
+          type="button"
+          aria-label={isListening ? t.companion.listening : t.companion.voice}
+          onClick={startVoiceConversation}
+          className={isListening ? 'listening' : ''}
+        >
+          <Icon name={isListening ? 'graphic_eq' : 'mic'} />
         </button>
         <input type="text" placeholder={t.companion.input} value={draft} onChange={(event) => setDraft(event.target.value)} />
         <button type="submit" aria-label={t.companion.send}>
           <Icon name="send" />
         </button>
       </form>
+      <button className="stop-voice-button" type="button" onClick={() => window.speechSynthesis.cancel()}>
+        <Icon name="volume_off" />
+        {t.companion.stopVoice}
+      </button>
     </div>
   )
 }

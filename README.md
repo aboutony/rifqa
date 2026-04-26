@@ -16,6 +16,7 @@ Arabic-first full-stack foundation for RIFQA, a Saudi and GCC maternal wellness 
 - Safety-first backend stubs for check-ins, AI companion, kick sessions, and contractions
 - Seeded demo mode where every visible button has a working destination or action
 - Supabase production schema with RLS for profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weight logs, and privacy requests
+- Free browser-native voice loop: speech recognition to AI text response, then browser text-to-speech
 
 ## Scripts
 
@@ -51,6 +52,16 @@ The current backend runs as Vercel serverless functions under `api/`.
 In `RIFQA_ENV=demo`, API routes return seeded/demo responses without requiring auth. In `RIFQA_ENV=production`, routes require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and a valid `Authorization: Bearer <access_token>` header.
 
 The initial Supabase migration is in `supabase/migrations/202604260001_initial_health_data.sql`.
+
+## Voice Mode
+
+Voice mode uses browser-native speech APIs to stay within a free-tool approach:
+
+- Speech recognition captures the user's voice where supported by the browser.
+- The transcript is sent to `/api/companion`.
+- The AI response is spoken with browser text-to-speech.
+
+This is not OpenAI Realtime streaming audio. Browser support varies, especially across iOS, Safari, and installed PWAs.
 
 ## Legal Drafts
 
