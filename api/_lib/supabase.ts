@@ -33,13 +33,8 @@ function getBearerToken(req: VercelRequest) {
 export async function getRequestContext(req: VercelRequest): Promise<RequestContext> {
   const supabase = getAdminClient()
   const token = getBearerToken(req)
-  const isProduction = process.env.RIFQA_ENV === 'production'
 
   if (!supabase || !token) {
-    if (isProduction) {
-      throw new Error('Production API requires SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, and a Bearer token.')
-    }
-
     return {
       mode: 'demo',
       supabase: null,
@@ -58,4 +53,3 @@ export async function getRequestContext(req: VercelRequest): Promise<RequestCont
     userId: data.user.id,
   }
 }
-

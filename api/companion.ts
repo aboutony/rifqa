@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           message,
           lang,
           safetyMessage: assessment.message,
-        })
+        }).catch(() => null)
   const reply = aiResponse?.text || fallbackReply
 
   return sendJson(res, 200, {

@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     message: `Create a concise clinician visit summary from these user-owned notes. Do not diagnose. Notes: ${notes}`,
     lang,
     safetyMessage: 'Visit summaries must be factual and user-verifiable.',
-  })
+  }).catch(() => null)
 
   return sendJson(res, 200, {
     data: {
@@ -26,4 +26,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     },
   })
 }
-
