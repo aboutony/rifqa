@@ -209,7 +209,8 @@
         <thead><tr><th>Area</th><th>Must Build</th><th>Why It Matters</th></tr></thead>
         <tbody>
           <tr><td>Mental Health</td><td>Daily check-ins, PPD/anxiety screening, mood trends, crisis-safe mode, support library.</td><td>This is RIFQA's sharpest differentiation and subscription engine.</td></tr>
-          <tr><td>AI Guidance</td><td>Arabic AI companion, smart action cards, doctor visit prep, Saudi care pathway helper.</td><td>Turns static content into state-aware help.</td></tr>
+          <tr><td>AI Guidance</td><td>Arabic AI companion, smart action cards, doctor visit prep, Saudi care pathway helper, relaxation audio recommendations, and safe exercise nudges.</td><td>Turns static content into state-aware help.</td></tr>
+          <tr><td>Wellness Recommendations</td><td>Relaxing music, Quran/recitation, prayer, breathing audio, user playlists, and doctor-first exercise plans.</td><td>AI notifies only when behavior patterns call for it; doctor exercise instructions override AI.</td></tr>
           <tr><td>Baby 0-3</td><td>Feeding, sleep, diapers, postpartum recovery, milestones, journal, vaccines.</td><td>Prevents churn after birth.</td></tr>
           <tr><td>Saudi/GCC</td><td>Ramadan mode, Islamic guidance, Hijri dates, Arabic baby names, partner mode, domestic support context, Hajj/Umrah safety.</td><td>This is the cultural moat Western apps cannot copy quickly.</td></tr>
           <tr><td>Growth</td><td>Birth plan, registry/gift list, telehealth partners, moderated community, B2B sponsored access.</td><td>Turns trust into distribution and revenue.</td></tr>
@@ -241,7 +242,7 @@
           <tr><td class="phase">1. Onboarding and Trust</td><td>Splash, language, privacy promise, low-PII auth, journey setup, emotional baseline.</td><td>User reaches home without name/email/phone.</td></tr>
           <tr><td class="phase">2. Pregnancy Toolkit</td><td>Home, timeline, contractions, kicks, weight, symptoms, meds, baby size/visuals.</td><td>First screen proves RIFQA is a complete pregnancy app.</td></tr>
           <tr><td class="phase">3. Mental Health</td><td>Daily check-in, screening, mood trends, crisis-safe mode, action cards.</td><td>Every concerning signal ends with a concrete next step.</td></tr>
-          <tr><td class="phase">4. AI Companion</td><td>Chat UI, context handoff, voice input, private summary.</td><td>User understands AI is support, not a doctor.</td></tr>
+          <tr><td class="phase">4. AI Companion</td><td>Chat UI, context handoff, voice input, private summary, relaxation and exercise recommendation cards.</td><td>User understands AI is support, not a doctor; doctor exercise instructions override AI.</td></tr>
           <tr><td class="phase">5. Baby 0-3</td><td>Baby dashboard, logs, milestones, journal, vaccines.</td><td>Post-birth transition feels natural and useful.</td></tr>
           <tr><td class="phase">6. Saudi/GCC</td><td>Ramadan, Islamic guidance, baby names, partner mode, birth plan.</td><td>Feels made for Saudi mothers, not translated.</td></tr>
           <tr><td class="phase">7. Growth</td><td>Subscriptions, B2B activation, telehealth, moderated community.</td><td>No paywall in crisis; no community without moderation.</td></tr>
@@ -280,6 +281,7 @@
           <tr><td>Trackers</td><td><code>POST /api/kick-sessions</code> and <code>POST /api/contractions</code>.</td><td>Persistence, reminders, history charts, clinician export.</td></tr>
           <tr><td>Symptoms and weight</td><td><code>POST /api/symptoms</code> and <code>POST /api/weight-logs</code> persist when authenticated.</td><td>Visit summary generation and trend views.</td></tr>
           <tr><td>Consent and privacy</td><td><code>POST /api/consents</code> and <code>POST /api/privacy</code> record consent plus export/delete requests.</td><td>Automated export package and deletion workflow.</td></tr>
+          <tr><td>Relaxation and exercise</td><td><code>POST /api/recommendations</code>, <code>POST /api/playlists</code>, and <code>POST /api/exercise-plans</code>.</td><td>Push notification delivery and richer behavior analysis.</td></tr>
           <tr><td>Localization</td><td>Arabic and English user-facing API responses.</td><td>Translation CMS and reviewer workflow.</td></tr>
           <tr><td>Safety</td><td>Rule-based urgent/watch/normal classification.</td><td>Clinician-approved rule registry and audit trail.</td></tr>
         </tbody>
@@ -294,6 +296,8 @@
           <tr><td>Safety-first companion stub</td><td>Done</td><td>No direct model call yet; correct until guardrails and redaction are ready.</td></tr>
           <tr><td>Tracker API contracts</td><td>Done</td><td>Kick and contraction endpoints define MVP data shapes.</td></tr>
           <tr><td>Supabase initial schema</td><td>Done</td><td>Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests.</td></tr>
+          <tr><td>Wellness recommendation schema</td><td>Done</td><td>Migration covers relaxation playlists, exercise plans, and wellness recommendations.</td></tr>
+          <tr><td>AI wellness recommendation API</td><td>Done</td><td>Check-ins and <code>/api/recommendations</code> can return relaxation/exercise prompts based on behavior signals.</td></tr>
           <tr><td>RLS policies</td><td>Done</td><td>Every user-owned table has owner-only RLS policies.</td></tr>
           <tr><td>Demo/production split</td><td>Done</td><td>Demo works without auth; production requires Supabase env and Bearer token.</td></tr>
           <tr><td>Build/lint verification</td><td>Done</td><td><code>npm run lint</code> and <code>npm run build</code> pass.</td></tr>

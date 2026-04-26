@@ -62,6 +62,8 @@ These must ship before public launch.
 | Mood Trends | Simple trend view over time | "How things have been lately" chart | Aggregation tables, trend window logic |
 | Crisis-Safe Mode | Scripted grounding, trusted person prompt, local urgent resources | Calm teal mode, no red panic UI, no paywall | Safety rules, crisis event flags, resource directory |
 | Support Library | Short contextual cards, coping exercises, sleep-deprivation support | Stage-aware content cards | CMS, clinical-review workflow, citations/approval metadata |
+| Relaxation and Spiritual Audio | AI-recommended relaxing music, Quran/recitation, prayer, breathing audio, and user playlists based on stress/sleep patterns | Relaxation screen, add-playlist flow, play recommendation action, personal playlist management | `relaxation_playlists`, recommendation rules, content safety tags, notification triggers |
+| Pregnancy-Safe Exercise | Doctor-prescribed exercise plan first; AI only suggests gentle low-risk movement if no doctor instructions and no concerning symptoms | Exercise screen, doctor-plan display, AI fallback recommendations, safety disclaimers | `exercise_plans`, source priority, contraindication rules, recommendation audit |
 
 ### 4.4 AI Companion and What-To-Do-Now Guidance
 
@@ -69,6 +71,7 @@ These must ship before public launch.
 |---|---|---|---|
 | Arabic AI Companion | Reflective Arabic chat, voice-ready, bounded medical responses | Chat screen, quick replies, optional voice input, private summaries | LLM gateway, safety filters, prompt templates, redaction, rate limits |
 | Smart Action Cards | Reassure, try action, talk to family, prepare for clinic, urgent help | Home cards and post-check-in cards | Rules engine, recommendation service, content lookup |
+| Behavior-Based Wellness Nudges | Notify when patterns suggest relaxation audio, prayer, breathing, or safe movement | Post-check-in recommendation cards, quiet-hour aware nudges | `wellness_recommendations`, notification triggers, cooldowns, doctor-overrides-AI logic |
 | Doctor Visit Prep | Symptoms summary, questions, what to say in Arabic | Export/share summary screen | Visit summary generator, PDF/share payload |
 | Saudi Care Pathway Helper | OB, family medicine, ER, hotline, telehealth guidance | "Who should I contact?" decision support | Care pathway rules, hospital/resource directory |
 
@@ -173,6 +176,8 @@ Open community, full marketplace, complex gamification, insurer integrations, un
 | 3.3 Mood trends | Simple trend summary | Avoids alarming charts and labels |
 | 3.4 Crisis-safe mode | Breathing UI, trusted person, urgent resources | No paywall; no red panic visual language |
 | 3.5 What-to-do-now | Reassurance/action/clinic/urgent cards | Every concerning input ends in a concrete next step |
+| 3.6 Relaxation recommendations | Music/prayer/recitation/breathing suggestions based on sleep, stress, mood, and user playlist | AI recommends at the right moment; user can add own playlist |
+| 3.7 Exercise recommendations | Doctor plan first, AI gentle movement fallback only when safe | Doctor instructions visibly override AI |
 
 ### FE Phase 4: AI Companion
 
@@ -266,7 +271,7 @@ Open community, full marketplace, complex gamification, insurer integrations, un
 
 | Subphase | Build | Acceptance Criteria |
 |---|---|---|
-| 5.1 Notification engine | Reminders, quiet hours, prayer-aware timing later | Cooldowns prevent spam |
+| 5.1 Notification engine | Reminders, quiet hours, prayer-aware timing, relaxation and exercise nudges | Cooldowns prevent spam |
 | 5.2 Nudge optimization | Timing and content personalization | Never escalates safety decisions via black box |
 | 5.3 Feature flags | Ramadan mode, partner mode, B2B, experiments | Can target by locale/stage safely |
 
@@ -305,6 +310,7 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | Contraction counter | `POST /api/contractions?lang=ar|en` with pattern guidance | Labor session persistence, clinician export |
 | Symptom and weight logs | `POST /api/symptoms`, `POST /api/weight-logs` with Supabase persistence when authenticated | Visit summary generation and trend views |
 | Consent and privacy | `POST /api/consents`, `POST /api/privacy` for export/delete request records | Automated export package and deletion workflow |
+| Relaxation and exercise | `POST /api/recommendations`, `POST /api/playlists`, `POST /api/exercise-plans` with doctor-overrides-AI source logic | Push notification delivery and richer behavior analysis |
 | Localization | Arabic and English API responses | Translation CMS and reviewer workflow |
 | Safety | Rule-based urgent/watch/normal classification | Clinician-approved rule registry and audit trail |
 
@@ -317,6 +323,8 @@ This repo has now moved from frontend-only prototype to a deployable Vercel full
 | Safety-first companion stub | Done | No direct model call yet, which is correct until guardrails and redaction are ready |
 | Tracker API contracts | Done | Kick and contraction endpoints define MVP data shapes |
 | Supabase initial schema | Done | Migration covers profiles, pregnancies, consents, check-ins, kicks, contractions, symptoms, weights, privacy requests |
+| Wellness recommendation schema | Done | Migration covers relaxation playlists, exercise plans, and wellness recommendations |
+| AI wellness recommendation API | Done | Check-ins and `/api/recommendations` can return relaxation/exercise prompts based on behavior signals |
 | RLS policies | Done | Every user-owned table has owner-only RLS policies |
 | Demo/production split | Done | Demo works without auth; production requires Supabase env and Bearer token |
 | Build/lint verification | Done | `npm run lint` and `npm run build` pass |

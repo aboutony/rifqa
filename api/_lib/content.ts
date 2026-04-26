@@ -21,7 +21,7 @@ export type TimelineEntry = {
 
 export type ActionCard = {
   id: string
-  tone: 'calm' | 'track' | 'urgent' | 'growth'
+  tone: 'calm' | 'track' | 'urgent' | 'growth' | 'wellness'
   title: string
   body: string
   cta: string
@@ -79,6 +79,20 @@ const content = {
         body: 'حوّلي الأعراض والملاحظات إلى ملخص واضح للطبيبة.',
         cta: 'جهزي الملخص',
       },
+      {
+        id: 'relaxation-audio',
+        tone: 'wellness',
+        title: 'Relaxation audio',
+        body: 'RIFQA can suggest calm recitation, prayer, or breathing music when sleep or stress patterns call for it.',
+        cta: 'Open relaxation',
+      },
+      {
+        id: 'safe-exercise',
+        tone: 'wellness',
+        title: 'Safe movement',
+        body: 'Doctor instructions come first. If none are stored, RIFQA can suggest gentle movement.',
+        cta: 'Open exercise',
+      },
     ] satisfies ActionCard[],
   },
   en: {
@@ -122,6 +136,20 @@ const content = {
         body: 'Turn symptoms and notes into a clear summary for your clinician.',
         cta: 'Prepare summary',
       },
+      {
+        id: 'relaxation-audio',
+        tone: 'wellness',
+        title: 'State-aware relaxation',
+        body: 'When sleep is poor or stress rises, RIFQA can suggest calm recitation, prayer, or breathing music.',
+        cta: 'Open relaxation',
+      },
+      {
+        id: 'safe-exercise',
+        tone: 'wellness',
+        title: 'Safe movement',
+        body: 'Clinician instructions come first. If none are stored, RIFQA can suggest gentle movement based on patterns.',
+        cta: 'Open exercise',
+      },
     ] satisfies ActionCard[],
   },
 } satisfies Record<ApiLang, { timeline: TimelineEntry[]; actions: ActionCard[] }>
@@ -138,6 +166,8 @@ export function getBootstrapContent(lang: ApiLang) {
       'contraction_counter',
       'weight_tracker',
       'symptom_log',
+      'relaxation_recommendations',
+      'doctor_or_ai_exercise_recommendations',
       'ai_companion_safe_stub',
     ],
   }

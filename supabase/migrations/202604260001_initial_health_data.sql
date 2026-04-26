@@ -112,6 +112,47 @@ create table public.weight_logs (
   constraint weight_logs_weight_check check (weight_kg > 0 and weight_kg < 300)
 );
 
+create table public.relaxation_playlists (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  playlist_url text,
+  playlist_type text not null default 'personal',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint relaxation_playlists_type_check check (playlist_type in ('personal', 'recitation', 'prayer', 'music', 'breathing'))
+);
+
+create table public.exercise_plans (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  source text not null,
+  title text not null,
+  instructions text not null,
+  restrictions text,
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint exercise_plans_source_check check (source in ('doctor', 'ai_rules'))
+);
+
+create table public.wellness_recommendations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  kind text not null,
+  priority text not null default 'low',
+  source text not null,
+  title text not null,
+  body text not null,
+  trigger text not null,
+  delivered_at timestamptz,
+  dismissed_at timestamptz,
+  created_at timestamptz not null default now(),
+  constraint wellness_recommendations_kind_check check (kind in ('relaxation_audio', 'exercise')),
+  constraint wellness_recommendations_priority_check check (priority in ('low', 'medium', 'high')),
+  constraint wellness_recommendations_source_check check (source in ('doctor', 'ai_rules'))
+);
+
 create table public.privacy_requests (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -131,6 +172,14 @@ create trigger pregnancies_set_updated_at
 before update on public.pregnancies
 for each row execute function public.set_updated_at();
 
+create trigger relaxation_playlists_set_updated_at
+before update on public.relaxation_playlists
+for each row execute function public.set_updated_at();
+
+create trigger exercise_plans_set_updated_at
+before update on public.exercise_plans
+for each row execute function public.set_updated_at();
+
 alter table public.profiles enable row level security;
 alter table public.pregnancies enable row level security;
 alter table public.consents enable row level security;
@@ -140,6 +189,9 @@ alter table public.kick_events enable row level security;
 alter table public.contraction_sessions enable row level security;
 alter table public.symptom_logs enable row level security;
 alter table public.weight_logs enable row level security;
+alter table public.relaxation_playlists enable row level security;
+alter table public.exercise_plans enable row level security;
+alter table public.wellness_recommendations enable row level security;
 alter table public.privacy_requests enable row level security;
 
 create policy "users manage own profiles" on public.profiles
@@ -169,6 +221,15 @@ create policy "users manage own symptom logs" on public.symptom_logs
 create policy "users manage own weight logs" on public.weight_logs
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
+create policy "users manage own relaxation playlists" on public.relaxation_playlists
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create policy "users manage own exercise plans" on public.exercise_plans
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create policy "users manage own wellness recommendations" on public.wellness_recommendations
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
 create policy "users manage own privacy requests" on public.privacy_requests
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
@@ -177,4 +238,6 @@ create index kick_sessions_user_created_idx on public.kick_sessions (user_id, cr
 create index contraction_sessions_user_created_idx on public.contraction_sessions (user_id, created_at desc);
 create index symptom_logs_user_created_idx on public.symptom_logs (user_id, created_at desc);
 create index weight_logs_user_created_idx on public.weight_logs (user_id, created_at desc);
-
+create index relaxation_playlists_user_created_idx on public.relaxation_playlists (user_id, created_at desc);
+create index exercise_plans_user_active_idx on public.exercise_plans (user_id, active, created_at desc);
+create index wellness_recommendations_user_created_idx on public.wellness_recommendations (user_id, created_at desc);

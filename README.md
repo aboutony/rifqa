@@ -43,6 +43,9 @@ The current backend runs as Vercel serverless functions under `api/`.
 | `/api/weight-logs` | `POST` | Pregnancy weight log persistence |
 | `/api/consents` | `POST` | Consent event persistence |
 | `/api/privacy` | `POST` | Export/delete privacy request persistence |
+| `/api/recommendations?lang=ar|en` | `POST` | AI/rules wellness recommendations for relaxation audio and exercise |
+| `/api/playlists` | `POST` | User relaxation playlist persistence |
+| `/api/exercise-plans` | `POST` | Doctor or AI exercise plan persistence |
 
 In `RIFQA_ENV=demo`, API routes return seeded/demo responses without requiring auth. In `RIFQA_ENV=production`, routes require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and a valid `Authorization: Bearer <access_token>` header.
 

@@ -12,6 +12,8 @@ type Screen =
   | 'contractions'
   | 'kicks'
   | 'weight'
+  | 'wellness'
+  | 'exercise'
 
 type Theme = 'light' | 'dark'
 type Lang = 'ar' | 'en'
@@ -55,6 +57,8 @@ const content = {
         { label: 'موقت التقلصات', icon: 'timer', tone: 'gold', target: 'contractions' },
         { label: 'عد الركلات', icon: 'touch_app', tone: 'teal', target: 'kicks' },
         { label: 'الوزن', icon: 'monitor_weight', tone: 'violet', target: 'weight' },
+        { label: 'الاسترخاء', icon: 'self_improvement', tone: 'teal', target: 'wellness' },
+        { label: 'التمارين', icon: 'directions_walk', tone: 'gold', target: 'exercise' },
       ] satisfies Tool[],
     },
     timeline: {
@@ -125,6 +129,14 @@ const content = {
       weightBody: 'آخر قراءة: 72.4 كجم. الاتجاه مستقر ولا توجد لغة لوم أو تخويف.',
       addWeight: 'إضافة وزن',
       viewTrend: 'عرض الاتجاه',
+      wellnessTitle: 'استرخاء وصوتيات',
+      wellnessBody: 'توصية رفيقة الآن: تلاوة هادئة أو دعاء قصير أو موسيقى تنفس لمدة 7 دقائق بسبب نوم متقطع وتوتر خفيف. يمكنك إضافة قائمتك الخاصة لاحقا.',
+      playRecommended: 'تشغيل المقترح',
+      addPlaylist: 'إضافة قائمتي',
+      exerciseTitle: 'تمارين آمنة',
+      exerciseBody: 'لا توجد تعليمات طبيبة مسجلة في العرض التجريبي. تقترح رفيقة مشيا خفيفا 10 دقائق وتمدد كتف لطيف. تعليمات الطبيبة ستتجاوز أي اقتراح AI.',
+      startExercise: 'بدء تمرين لطيف',
+      doctorPlan: 'خطة الطبيبة',
       backHome: 'العودة للرئيسية',
     },
   },
@@ -164,6 +176,8 @@ const content = {
         { label: 'Contraction timer', icon: 'timer', tone: 'gold', target: 'contractions' },
         { label: 'Kick counter', icon: 'touch_app', tone: 'teal', target: 'kicks' },
         { label: 'Weight', icon: 'monitor_weight', tone: 'violet', target: 'weight' },
+        { label: 'Relaxation', icon: 'self_improvement', tone: 'teal', target: 'wellness' },
+        { label: 'Exercise', icon: 'directions_walk', tone: 'gold', target: 'exercise' },
       ] satisfies Tool[],
     },
     timeline: {
@@ -234,6 +248,14 @@ const content = {
       weightBody: 'Latest entry: 72.4 kg. Trend is steady, with no shaming language.',
       addWeight: 'Add weight',
       viewTrend: 'View trend',
+      wellnessTitle: 'Relaxation and audio',
+      wellnessBody: 'RIFQA recommends a calm recitation, short prayer, or 7-minute breathing music now because sleep was interrupted and stress is slightly elevated. Personal playlists can be added later.',
+      playRecommended: 'Play recommendation',
+      addPlaylist: 'Add my playlist',
+      exerciseTitle: 'Safe exercise',
+      exerciseBody: 'No clinician instructions are stored in this demo. RIFQA suggests a 10-minute easy walk and gentle shoulder stretch. Doctor instructions override AI suggestions.',
+      startExercise: 'Start gentle exercise',
+      doctorPlan: 'Doctor plan',
       backHome: 'Back home',
     },
   },
@@ -333,6 +355,8 @@ function App() {
           {screen === 'contractions' && <UtilityScreen title={t.utility.contractionsTitle} body={t.utility.contractionsBody} icon="timer" primary={t.utility.startTimer} secondary={t.utility.saveSession} onPrimary={() => showNotice(t.utility.contractionsBody)} onSecondary={() => showNotice(t.saved)} />}
           {screen === 'kicks' && <UtilityScreen title={t.utility.kicksTitle} body={t.utility.kicksBody} icon="touch_app" primary={t.utility.addKick} secondary={t.utility.endSession} onPrimary={() => showNotice(t.utility.kicksBody)} onSecondary={() => showNotice(t.saved)} />}
           {screen === 'weight' && <UtilityScreen title={t.utility.weightTitle} body={t.utility.weightBody} icon="monitor_weight" primary={t.utility.addWeight} secondary={t.utility.viewTrend} onPrimary={() => showNotice(t.saved)} onSecondary={() => showNotice(t.utility.weightBody)} />}
+          {screen === 'wellness' && <UtilityScreen title={t.utility.wellnessTitle} body={t.utility.wellnessBody} icon="self_improvement" primary={t.utility.playRecommended} secondary={t.utility.addPlaylist} onPrimary={() => showNotice(t.utility.wellnessBody)} onSecondary={() => showNotice(t.saved)} />}
+          {screen === 'exercise' && <UtilityScreen title={t.utility.exerciseTitle} body={t.utility.exerciseBody} icon="directions_walk" primary={t.utility.startExercise} secondary={t.utility.doctorPlan} onPrimary={() => showNotice(t.utility.exerciseBody)} onSecondary={() => showNotice(t.saved)} />}
         </section>
 
         <BottomNav active={screen} items={t.nav} onNavigate={navigate} />
