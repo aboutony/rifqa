@@ -1,4 +1,4 @@
-import type { VercelRequest } from '@vercel/node'
+import type { VercelRequest } from './vercel-types.js'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { reportApiError } from './monitoring.js'
 

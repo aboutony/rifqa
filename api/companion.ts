@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { DEFAULT_PROMPT_VERSION, classifyCompanionSafety, redactSensitiveIdentifiers } from './_lib/ai-policy.js'
 import { assessText } from './_lib/safety.js'
 import { getLang, readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'

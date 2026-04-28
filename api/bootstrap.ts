@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { getBootstrapContent } from './_lib/content.js'
 import { getLang, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 

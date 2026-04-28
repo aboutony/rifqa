@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { getLang, readString, sendJson, sendMethodNotAllowed, type ApiLang } from './_lib/http.js'
 import { getRequestContext, type RequestContext } from './_lib/supabase.js'
 import { isReviewer } from './review-queue.js'

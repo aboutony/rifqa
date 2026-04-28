@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from '../api/_lib/vercel-types.js'
 import checkins from '../api/checkins.js'
 import babyLogs from '../api/baby-logs.js'
 import postpartumLogs from '../api/postpartum-logs.js'

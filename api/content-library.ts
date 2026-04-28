@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { capabilities, getPublicReviewedContentFromItems } from './_lib/maternal-os.js'
 import { getLang, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 import { getPersistedReviewedContent } from './_lib/reviewed-content-store.js'

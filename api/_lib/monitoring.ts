@@ -1,4 +1,4 @@
-import type { VercelRequest } from '@vercel/node'
+import type { VercelRequest } from './vercel-types.js'
 
 type MonitoringEvent = {
   level: 'info' | 'warn' | 'error'

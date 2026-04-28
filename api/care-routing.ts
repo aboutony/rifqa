@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { buildCareRoute } from './_lib/maternal-os.js'
 import { getLang, readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 

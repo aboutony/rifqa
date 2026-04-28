@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from './_lib/vercel-types.js'
 import { DEFAULT_PROMPT_VERSION } from './_lib/ai-policy.js'
 import { readString, sendJson, sendMethodNotAllowed } from './_lib/http.js'
 import { getRequestContext } from './_lib/supabase.js'
