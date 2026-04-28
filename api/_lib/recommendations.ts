@@ -54,7 +54,7 @@ export function buildWellnessRecommendations({
       body:
         lang === 'ar'
           ? hasDoctorExercisePlan
-            ? 'اتبعي خطة الحركة المسجلة من طبيبتك. تعليمات الطبيبة تتجاوز أي اقتراح AI.'
+            ? 'اتبعي خطة الحركة المسجلة من طبيبتك. تعليمات الطبيبة تتجاوز أي اقتراح من رفقة.'
             : 'لا توجد تعليمات طبيبة مسجلة. يمكن تجربة مشي خفيف أو تمدد لطيف إذا لم توجد أعراض مقلقة.'
           : hasDoctorExercisePlan
             ? 'Follow your stored clinician movement plan. Clinician instructions override AI suggestions.'
@@ -65,4 +65,3 @@ export function buildWellnessRecommendations({
 
   return recommendations
 }
-

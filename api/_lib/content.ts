@@ -1,4 +1,5 @@
 import type { ApiLang } from './http.js'
+import { capabilities, getReviewedContent } from './maternal-os.js'
 
 export type JourneyProfile = {
   id: string
@@ -82,16 +83,16 @@ const content = {
       {
         id: 'relaxation-audio',
         tone: 'wellness',
-        title: 'Relaxation audio',
-        body: 'RIFQA can suggest calm recitation, prayer, or breathing music when sleep or stress patterns call for it.',
-        cta: 'Open relaxation',
+        title: 'صوتيات استرخاء',
+        body: 'يمكن لرفقة اقتراح تلاوة هادئة أو دعاء أو صوتيات تنفس عند اضطراب النوم أو ارتفاع التوتر.',
+        cta: 'فتح الاسترخاء',
       },
       {
         id: 'safe-exercise',
         tone: 'wellness',
-        title: 'Safe movement',
-        body: 'Doctor instructions come first. If none are stored, RIFQA can suggest gentle movement.',
-        cta: 'Open exercise',
+        title: 'حركة آمنة',
+        body: 'تعليمات الطبيبة تأتي أولا. إذا لم توجد تعليمات محفوظة، تقترح رفقة حركة لطيفة مناسبة.',
+        cta: 'فتح التمارين',
       },
     ] satisfies ActionCard[],
   },
@@ -159,6 +160,8 @@ export function getBootstrapContent(lang: ApiLang) {
     profile: demoProfile,
     timeline: content[lang].timeline,
     actions: content[lang].actions,
+    reviewedContent: getReviewedContent(lang),
+    maternalOs: capabilities,
     capabilities: [
       'journey_profile',
       'daily_checkin',
@@ -169,6 +172,16 @@ export function getBootstrapContent(lang: ApiLang) {
       'relaxation_recommendations',
       'doctor_or_ai_exercise_recommendations',
       'ai_companion_safe_stub',
+      'clinical_review_cms',
+      'saudi_care_routing',
+      'partner_permissions',
+      'postpartum_baby_continuity',
+      'privacy_trust_center',
+      'growth_referral_loops',
+      'saudi_differentiation_mode',
+      'hijri_gregorian_dates',
+      'saudi_vaccination_schedule',
+      'arabic_baby_name_finder',
     ],
   }
 }

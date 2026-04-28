@@ -25,6 +25,9 @@ npm install
 npm run dev
 npm run build
 npm run lint
+npm run test:api
+npm run test:e2e
+npm run seed:reviewed-content
 ```
 
 ## Backend API
@@ -52,6 +55,22 @@ The current backend runs as Vercel serverless functions under `api/`.
 In `RIFQA_ENV=demo`, API routes return seeded/demo responses without requiring auth. In `RIFQA_ENV=production`, routes require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and a valid `Authorization: Bearer <access_token>` header.
 
 The initial Supabase migration is in `supabase/migrations/202604260001_initial_health_data.sql`.
+
+## Production Readiness
+
+- Environment setup: `docs/ENVIRONMENT_SETUP.md`
+- Production runbook: `docs/PRODUCTION_READINESS.md`
+- Backup/recovery: `docs/BACKUP_RECOVERY.md`
+- Legal and medical review: `docs/LEGAL_MEDICAL_REVIEW.md`
+- App Store / Play Store checklist: `docs/APP_STORE_READINESS.md`
+
+Reviewed content seed sync is available through:
+
+```bash
+RIFQA_BASE_URL=https://your-production-domain.example \
+RIFQA_REVIEWER_ACCESS_TOKEN=reviewer_or_admin_bearer_token \
+npm run seed:reviewed-content
+```
 
 ## Voice Mode
 

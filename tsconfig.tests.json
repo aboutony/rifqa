@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "strict": true,
+    "rootDir": ".",
+    "outDir": ".tmp-tests"
+  },
+  "include": ["api/**/*.ts", "tests/**/*.ts"]
+}

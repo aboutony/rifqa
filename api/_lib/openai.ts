@@ -1,7 +1,10 @@
+import { DEFAULT_PROMPT_VERSION, redactForAiContext, redactSensitiveIdentifiers } from './ai-policy.js'
+
 export type OpenAIResponse = {
   text: string
   requestId: string | null
   model: string
+  promptVersion: string
 }
 
 type ResponseOutputContent = {
@@ -36,10 +39,16 @@ export async function createMaternalCompanionResponse({
   message,
   lang,
   safetyMessage,
+  approvedContext = '',
+  userContext = '',
+  promptVersion = process.env.OPENAI_PROMPT_VERSION || DEFAULT_PROMPT_VERSION,
 }: {
   message: string
   lang: 'ar' | 'en'
   safetyMessage: string
+  approvedContext?: string
+  userContext?: string
+  promptVersion?: string
 }): Promise<OpenAIResponse | null> {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) return null
@@ -58,6 +67,7 @@ export async function createMaternalCompanionResponse({
       instructions:
         lang === 'ar'
           ? [
+              `Prompt version: ${promptVersion}.`,
               'You are RIFQA / رفقة, a Saudi maternal wellness companion.',
               'Reply in Arabic unless the user uses English.',
               'You are not a doctor and must not diagnose, prescribe medication, or override clinician instructions.',
@@ -66,6 +76,7 @@ export async function createMaternalCompanionResponse({
               'Keep the answer warm, short, culturally respectful, and action-oriented.',
             ].join('\n')
           : [
+              `Prompt version: ${promptVersion}.`,
               'You are RIFQA / رفقة, a Saudi maternal wellness companion.',
               'You are not a doctor and must not diagnose, prescribe medication, or override clinician instructions.',
               'For urgent pregnancy symptoms, reduced fetal movement, bleeding, severe pain, unsafe feelings, or self-harm, direct the user to clinician/emergency care.',
@@ -74,7 +85,9 @@ export async function createMaternalCompanionResponse({
             ].join('\n'),
       input: [
         `Safety assessment to respect: ${safetyMessage}`,
-        `User message: ${message}`,
+        approvedContext ? `Approved RIFQA clinical context: ${approvedContext}` : '',
+        userContext ? `User-owned context shared with consent: ${userContext}` : '',
+        `User message: ${redactSensitiveIdentifiers(message)}`,
       ].join('\n\n'),
     }),
   })
@@ -90,6 +103,8 @@ export async function createMaternalCompanionResponse({
     text: extractOutputText(payload),
     requestId,
     model,
+    promptVersion,
   }
 }
 
+export { redactForAiContext, redactSensitiveIdentifiers }

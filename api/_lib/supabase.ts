@@ -1,15 +1,17 @@
 import type { VercelRequest } from '@vercel/node'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { reportApiError } from './monitoring.js'
 
 export type RequestContext = {
   mode: 'demo' | 'production'
   supabase: SupabaseClient | null
   userId: string | null
+  appRole: string | null
 }
 
 let cachedAdmin: SupabaseClient | null = null
 
-function getAdminClient() {
+export function getServiceClient() {
   const url = process.env.SUPABASE_URL
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
@@ -31,7 +33,7 @@ function getBearerToken(req: VercelRequest) {
 }
 
 export async function getRequestContext(req: VercelRequest): Promise<RequestContext> {
-  const supabase = getAdminClient()
+  const supabase = getServiceClient()
   const token = getBearerToken(req)
 
   if (!supabase || !token) {
@@ -39,11 +41,13 @@ export async function getRequestContext(req: VercelRequest): Promise<RequestCont
       mode: 'demo',
       supabase: null,
       userId: null,
+      appRole: null,
     }
   }
 
   const { data, error } = await supabase.auth.getUser(token)
   if (error || !data.user) {
+    reportApiError(req, error ?? new Error('Invalid or expired access token.'), { auth: 'bearer' })
     throw new Error('Invalid or expired access token.')
   }
 
@@ -51,5 +55,6 @@ export async function getRequestContext(req: VercelRequest): Promise<RequestCont
     mode: 'production',
     supabase,
     userId: data.user.id,
+    appRole: typeof data.user.app_metadata?.role === 'string' ? data.user.app_metadata.role : null,
   }
 }
