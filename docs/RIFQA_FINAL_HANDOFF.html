@@ -1,0 +1,212 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RIFQA Final Handoff</title><style>body{font-family:Arial,sans-serif;line-height:1.55;max-width:960px;margin:40px auto;padding:0 24px;color:#24202b}h1,h2{color:#5b299b}code{background:#f3edf7;padding:2px 5px;border-radius:4px}pre{background:#f8f4fa;padding:14px;border-radius:8px;overflow:auto}li{margin:4px 0}</style></head><body>
+<h1>RIFQA Final Handoff</h1>
+
+<p>Prepared: April 28, 2026  </p>
+<p>Production: https://rifqa.vercel.app  </p>
+<p>GitHub: https://github.com/aboutony/rifqa  </p>
+<p>Vercel project: https://vercel.com/adonis-projects-7467a6ef/rifqa</p>
+
+<h2>Executive Summary</h2>
+
+<p>Rifqa is now a production-deployed bilingual maternal health companion for pregnancy, postpartum, baby care, partner support, privacy governance, B2B sponsored access, notifications, growth loops, content review, and safety-aware AI assistance.</p>
+
+<p>The project has passed the final health check, has been pushed to GitHub, and has been deployed to Vercel production. The current production alias returns HTTP 200.</p>
+
+<h2>Current Release</h2>
+
+<ul>
+<li>Main roadmap implementation commit: `abdde44 complete rifqa roadmap implementation`</li>
+<li>Dependency audit cleanup: `99e98b2 remove vulnerable vercel type dependency`</li>
+<li>Vercel type fix: `407ca6e fix local vercel api types`</li>
+<li>Live URL: `https://rifqa.vercel.app`</li>
+<li>Local project root: `e:\AFKARI\New Ideas\Crative Apps Ideas\RIFQA ????\rifqa-frontend`</li>
+</ul>
+
+<h2>What Was Completed</h2>
+
+<ul>
+<li>Privacy Center: export/delete requests, export bundle, delete-account workflow, persisted consents, persisted AI controls, B2B privacy firewall copy, and privacy-safe aggregate analytics model.</li>
+<li>Postpartum and Baby Mode: birth transition, 40-day tracker, postpartum logs, baby feeding/pumping/sleep/diaper/medication logs, Saudi vaccination schedule, milestones to 36 months, baby journal, and share cards.</li>
+<li>Partner Mode: invite flow, category permissions, shared baby progress, appointment reminders, support prompts, sensitive data hidden by default, and revoke access.</li>
+<li>Notifications: preferences, pregnancy-week notifications, check-in reminders, admin content review expiry reminders, appointment/vaccination reminders, quiet hours, and language-specific copy.</li>
+<li>Growth and Distribution: referral codes, milestone share cards, WhatsApp loops, clinic QR attribution, campaign/source tracking, due-date cohort model, and delayed in-app community until moderation is ready.</li>
+<li>B2B and Entitlements: sponsored access model, insurer/corporate entitlement checks, strict individual-data firewall, aggregate-only reporting, and admin reports with privacy thresholds.</li>
+<li>Testing and QA: API tests, RTL/LTR visual regression checks, Playwright mother/admin flows, safety scenario tests, privacy export/deletion tests, and mobile viewport coverage.</li>
+<li>Production Readiness: environment setup docs, deployment seed/sync process, monitoring/error logging hooks, AI/admin API rate limits, backup/recovery plan, legal/medical disclaimers review, and App Store/Play Store readiness pass.</li>
+</ul>
+
+<h2>Architecture</h2>
+
+<p>Rifqa is a Vite + React application with serverless API routes under `api/`. It uses TypeScript across frontend and API code, Supabase helper utilities for authenticated persistence, local fallback behavior for demo resilience, and Vercel for production deployment.</p>
+
+<p>Key areas:</p>
+
+<ul>
+<li>`src/App.tsx`: main mother/admin application experience and screen routing.</li>
+<li>`api/`: Vercel serverless functions for check-ins, logs, privacy, partner permissions, notifications, referrals, B2B reports, content review, AI companion, and admin operations.</li>
+<li>`api/_lib/`: shared API helpers for HTTP responses, Supabase context, AI policy, monitoring, rate limits, and local Vercel request/response types.</li>
+<li>`tests/`: API, retrieval, and Playwright end-to-end coverage.</li>
+<li>`docs/`: production setup, backup/recovery, legal/medical readiness, app store readiness, and this handoff.</li>
+<li>`scripts/`: deployment seed/sync utility for reviewed content.</li>
+</ul>
+
+<h2>Environment Variables</h2>
+
+<p>Recommended production variables are documented in `docs/ENVIRONMENT_SETUP.md`.</p>
+
+<p>Core variables:</p>
+
+<ul>
+<li>`VITE_SUPABASE_URL`</li>
+<li>`VITE_SUPABASE_ANON_KEY`</li>
+<li>`SUPABASE_SERVICE_ROLE_KEY`</li>
+<li>`OPENAI_API_KEY`</li>
+<li>`OPENAI_MODEL`</li>
+<li>`RATE_LIMIT_DISABLED`</li>
+<li>`AI_RATE_LIMIT_PER_MINUTE`</li>
+<li>`ADMIN_RATE_LIMIT_PER_MINUTE`</li>
+<li>`MONITORING_WEBHOOK_URL`</li>
+<li>`SENTRY_DSN`</li>
+</ul>
+
+<p>Do not expose service-role credentials to the browser. Keep user-level access scoped through Supabase RLS and server-side API context.</p>
+
+<h2>Runbook</h2>
+
+<p>Install dependencies:</p>
+
+<pre><code>
+npm install
+</code></pre>
+
+<p>Run local dev server:</p>
+
+<pre><code>
+npm run dev
+</code></pre>
+
+<p>Build production bundle:</p>
+
+<pre><code>
+npm run build
+</code></pre>
+
+<p>Run API and safety tests:</p>
+
+<pre><code>
+npm run test:api
+</code></pre>
+
+<p>Run Playwright flows:</p>
+
+<pre><code>
+npx playwright test
+</code></pre>
+
+<p>Deploy production:</p>
+
+<pre><code>
+npx vercel --prod --yes
+</code></pre>
+
+<p>Seed reviewed content:</p>
+
+<pre><code>
+npm run seed:reviewed-content
+</code></pre>
+
+<h2>Final Health Check Results</h2>
+
+<ul>
+<li>`npm run test:api`: passed.</li>
+<li>Retrieval and AI safety tests: passed, 20 checks.</li>
+<li>`npm run build`: passed.</li>
+<li>`npm run lint`: passed with 14 existing React hook dependency warnings.</li>
+<li>`npx playwright test`: passed, 18 tests.</li>
+<li>`npm audit --audit-level=moderate`: passed, 0 vulnerabilities.</li>
+<li>`https://rifqa.vercel.app`: HTTP 200.</li>
+</ul>
+
+<p>Known non-blocking warning:</p>
+
+<ul>
+<li>Vite reports a chunk larger than 500 kB after minification. Code splitting by feature/screen should be prioritized before adding heavier analytics, media, or community modules.</li>
+</ul>
+
+<h2>QA Coverage</h2>
+
+<p>API coverage includes check-ins, logs, privacy, admin, review, safety scenarios, retrieval, and AI safety boundaries.</p>
+
+<p>Playwright coverage includes:</p>
+
+<ul>
+<li>English and Arabic mother app flows.</li>
+<li>RTL/LTR visual regression baselines.</li>
+<li>Home CTA arrow direction in English.</li>
+<li>Mobile viewport navigation across core screens.</li>
+<li>Urgent check-in safety routing.</li>
+<li>Privacy export/delete controls.</li>
+<li>Admin governance route.</li>
+</ul>
+
+<h2>Privacy And Safety Model</h2>
+
+<p>Rifqa treats maternal data as sensitive health-adjacent information. The product now supports export, deletion, consent records, AI data controls, partner revocation, and B2B aggregate-only reporting.</p>
+
+<p>Default privacy posture:</p>
+
+<ul>
+<li>Mental health, private journal, sensitive symptoms, and AI chat are hidden from partners by default.</li>
+<li>Sponsors and corporate/insurer customers receive aggregate reports only.</li>
+<li>Privacy thresholds block reports where cohorts are too small.</li>
+<li>AI context is controlled by user-level settings.</li>
+<li>Medical content should remain reviewed, expiry-tracked, and non-diagnostic.</li>
+</ul>
+
+<h2>B2B Model</h2>
+
+<p>B2B readiness centers on sponsored access and aggregate-only reporting. Potential buyers include clinics, employers, insurers, hospitals, and maternity wellness programs.</p>
+
+<p>Sales-safe claim:</p>
+
+<p>Rifqa can support mothers between visits and give sponsors aggregate engagement insight without exposing individual maternal health data.</p>
+
+<h2>Growth Model</h2>
+
+<p>The product includes referral codes, milestone share cards, WhatsApp share loops, clinic QR attribution, campaign/source tracking, and due-date cohort modeling.</p>
+
+<p>Recommended growth sequence:</p>
+
+<p>1. Clinic QR pilots.</p>
+<p>2. WhatsApp/milestone sharing loops.</p>
+<p>3. Creator-led Arabic education.</p>
+<p>4. Sponsored employer or clinic pilots.</p>
+<p>5. Insurer/corporate expansion after aggregate reporting is validated.</p>
+
+<p>Open in-app community should remain delayed until moderation operations are ready.</p>
+
+<h2>Handoff Checklist</h2>
+
+<ul>
+<li>Confirm Vercel production environment variables before real-user launch.</li>
+<li>Connect Supabase production project and RLS policies for all persisted tables.</li>
+<li>Complete clinician review of all medical, postpartum, vaccination, and AI safety copy.</li>
+<li>Confirm legal disclaimers with Saudi counsel and medical reviewer.</li>
+<li>Add analytics dashboards for activation, retention, privacy events, referrals, and B2B reports.</li>
+<li>Add route-level code splitting before major scale.</li>
+<li>Configure Sentry or equivalent monitoring webhook in production.</li>
+<li>Run Playwright visual checks before each release.</li>
+<li>Keep export/delete workflows in every privacy QA pass.</li>
+</ul>
+
+<h2>Related Documents</h2>
+
+<ul>
+<li>`docs/ENVIRONMENT_SETUP.md`</li>
+<li>`docs/PRODUCTION_READINESS.md`</li>
+<li>`docs/BACKUP_RECOVERY.md`</li>
+<li>`docs/LEGAL_MEDICAL_REVIEW.md`</li>
+<li>`docs/APP_STORE_READINESS.md`</li>
+<li>`c:\Users\fahme\Downloads\RIFQA\Rifqa ? Competitive Analysis &amp; GTM Strategy.docx`</li>
+</ul>
+</body></html>
