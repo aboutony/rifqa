@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import { DEFAULT_PROMPT_VERSION, redactForAiContext, redactSensitiveIdentifiers } from './ai-policy.js'
 
 export type OpenAIResponse = {

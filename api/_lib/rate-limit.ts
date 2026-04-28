@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import type { VercelRequest, VercelResponse } from './vercel-types.js'
 import { sendJson } from './http.js'
 import { reportRateLimit } from './monitoring.js'

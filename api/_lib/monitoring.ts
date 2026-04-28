@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import type { VercelRequest } from './vercel-types.js'
 
 type MonitoringEvent = {
