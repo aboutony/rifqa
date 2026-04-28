@@ -1098,6 +1098,25 @@ function AccountScreen({
   const [sponsorCode, setSponsorCode] = useState('')
   const [entitlement, setEntitlement] = useState<EntitlementState | null>(null)
   const [busy, setBusy] = useState(false)
+  const isRtl = t.dir === 'rtl'
+  const profileDisplayName = isRtl && displayName.trim().toLowerCase() === 'noura'
+    ? '\u0646\u0648\u0631\u0629'
+    : displayName
+  const localizedEntitlementValue = (kind: 'plan' | 'source', value?: string) => {
+    const normalized = value || (kind === 'plan' ? 'free' : 'direct')
+    if (!isRtl) return normalized
+    const labels: Record<string, string> = {
+      free: '\u0645\u062c\u0627\u0646\u064a\u0629',
+      sponsored: '\u0645\u0645\u0648\u0644\u0629',
+      premium: '\u0645\u0645\u064a\u0632\u0629',
+      direct: '\u0645\u0628\u0627\u0634\u0631',
+      employer: '\u062c\u0647\u0629 \u0639\u0645\u0644',
+      insurer: '\u062a\u0623\u0645\u064a\u0646',
+      clinic: '\u0639\u064a\u0627\u062f\u0629',
+      corporate: '\u0634\u0631\u0643\u0629',
+    }
+    return labels[normalized] ?? normalized
+  }
   const ui = t.dir === 'rtl'
     ? {
         eyebrow: 'الحساب الآمن',
@@ -1339,11 +1358,11 @@ function AccountScreen({
         <dl>
           <div>
             <dt>{entitlementUi.plan}</dt>
-            <dd>{entitlement?.plan ?? 'free'}</dd>
+            <dd>{localizedEntitlementValue('plan', entitlement?.plan)}</dd>
           </div>
           <div>
             <dt>{entitlementUi.source}</dt>
-            <dd>{entitlement?.source ?? 'direct'}</dd>
+            <dd>{localizedEntitlementValue('source', entitlement?.source)}</dd>
           </div>
         </dl>
         <p>{entitlement?.b2bFirewall ?? ui.firewallBody}</p>
@@ -1356,7 +1375,7 @@ function AccountScreen({
           <Icon name="pregnant_woman" />
           <span>{ui.profileTitle}</span>
         </div>
-        <input value={displayName} placeholder={ui.displayName} onChange={(event) => setDisplayName(event.target.value)} />
+        <input value={profileDisplayName} placeholder={ui.displayName} onChange={(event) => setDisplayName(event.target.value)} />
         <label>
           <span>{ui.week}</span>
           <input type="number" min="1" max="42" value={pregnancyWeek} onChange={(event) => setPregnancyWeek(Number(event.target.value))} />
